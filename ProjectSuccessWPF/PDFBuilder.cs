@@ -76,6 +76,8 @@ namespace ProjectSuccessWPF
             document.Open();
 
             document.Add(CreateParagraph("Проект \"" + projectProps.getProjectTitle() + "\"", headerFontSize, true));
+
+            #region Tasks
             document.Add(CreateParagraph("Список задач", headerFontSize, true));
 
             int level = 0;
@@ -97,6 +99,12 @@ namespace ProjectSuccessWPF
                 document.Add(CreateParagraph(paragraphText, textFontSize, false));
                 ParseTaskHierarhyIntoText(t.childTasks, level.ToString(), projectProps);
             }
+            #endregion
+
+            #region Resources
+            document.Add(CreateParagraph("Список ресурсов", headerFontSize, true));
+
+            #endregion
 
             document.Close();
             if (!File.Exists(path))

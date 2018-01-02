@@ -7,6 +7,7 @@ namespace ProjectSuccessWPF
     {
         public ProjectFile project;
 
+        #region Tasks
         public List<TaskInformation> GetTasksWithoutHierarhy()
         {
             List<TaskInformation> taskList = new List<TaskInformation>();
@@ -63,6 +64,25 @@ namespace ProjectSuccessWPF
                 task.childTasks.Add(taskInf);
             }
         }
+        #endregion
+
+        #region Resources
+        public List<ResourceInformation> GetResources()
+        {
+            List<ResourceInformation> list = new List<ResourceInformation>();
+            foreach(Resource res in project.getAllResources())
+            {
+                ResourceInformation information = new ResourceInformation(res);
+                var assigments = res.getTaskAssignments().toArray();
+                foreach(Task assigment in assigments)
+                {
+                    information.tasks.Add(assigment);
+                }
+            }
+            return list;
+        }
+
+        #endregion
 
         public ProjectProperties GetProjectProperties()
         {
