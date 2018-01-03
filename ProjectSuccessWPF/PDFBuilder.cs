@@ -53,7 +53,7 @@ namespace ProjectSuccessWPF
                 level++;
                 string currentLevelString = levelStr + "." + level.ToString();
                 string paragraphText =
-                   currentLevelString + ". \"" + t.task.getName() + "\": продолжительность - " + t.GetConvertedDuration(projectProps) + ", ресурсы - ";
+                   currentLevelString + ". \"" + t.taskName + "\" (" + t.completePecrentage + ") : " + t.GetDurations() + ", ресурсы - ";
                 if (t.resources.Count != 0)
                 {
                     foreach (Resource res in t.resources)
@@ -69,13 +69,30 @@ namespace ProjectSuccessWPF
             }
         }
 
-        public void CreateReport(string path, List<TaskInformation> tasks, ProjectProperties projectProps)
+        public void CreateReport(string path, List<TaskInformation> tasks, List<ResourceInformation> resources, ProjectProperties projectProps)
         {
             PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(path, FileMode.Create));
             writer.StrictImageSequence = true;
             document.Open();
 
             document.Add(CreateParagraph("Проект \"" + projectProps.getProjectTitle() + "\"", headerFontSize, true));
+
+            document.Add(CreatePhrase(Environment.NewLine + "Инфомация о проекте: ", textFontSize, true));
+
+            string cost = projectProps.getBaselineCost().toString();
+            int remainCost = projectProps.getBaselineCost().intValue() - projectProps.getActualCost().intValue();
+            string projectCost = cost + " (осталось - " + remainCost.ToString() + "" + projectProps.getCurrencySymbol() + ")";
+            string projectTime = projectProps.getStartDate().toString() + " - " + projectProps.getFinishDate();
+
+            document.Add(CreatePhrase("сроки проекта: " + projectTime + "; стоимость проекта: " + projectCost, textFontSize, false));
+            document.Add(CreatePhrase("; число ресурсов - " + resources.Count, textFontSize, false));
+
+            int taskCount = 0;
+            foreach (TaskInformation t in tasks)
+            {
+                taskCount += t.SubTusksCount();
+            }
+            document.Add(CreatePhrase("; всего задач - " + taskCount + "." + Environment.NewLine, textFontSize, false));
 
             #region Tasks
             document.Add(CreateParagraph("Список задач", headerFontSize, true));
@@ -84,8 +101,10 @@ namespace ProjectSuccessWPF
             foreach (TaskInformation t in tasks)
             {
                 level++;
-                string paragraphText =
-                    level.ToString() + ". \"" + t.task.getName() + "\": продолжительность - " + t.GetConvertedDuration(projectProps) + ", ресурсы - ";
+                string paragraphText = level.ToString() + ". \"" + t.taskName + "\": " + t.GetDurations();//продолжительность - " + t.GetDuration(projectProps);
+                if (t.overtimeWork != "0.0")
+                    paragraphText += ", переработка - " + t.overtimeWork;
+                paragraphText += ", ресурсы - ";
                 if (t.resources.Count != 0)
                 {
                     foreach (Resource res in t.resources)
@@ -101,8 +120,18 @@ namespace ProjectSuccessWPF
             }
             #endregion
 
+            //Space between parts
+            document.Add(CreateParagraph(Environment.NewLine, textFontSize, false));
+
             #region Resources
             document.Add(CreateParagraph("Список ресурсов", headerFontSize, true));
+            foreach (ResourceInformation resInf in resources)
+            {
+                document.Add(CreateParagraph(
+                    resInf.resourceName + " (" + resInf.cost + "): время работы - " + resInf.workDuration + ", переработки - " + resInf.overtimeWorkDuration,
+                    textFontSize,
+                    false));
+            }
 
             #endregion
 

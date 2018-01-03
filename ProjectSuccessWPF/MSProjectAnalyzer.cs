@@ -5,7 +5,12 @@ namespace ProjectSuccessWPF
 {
     class MSProjectAnalyzer
     {
-        public ProjectFile project;
+        ProjectFile project;
+
+        public MSProjectAnalyzer(ProjectFile project)
+        {
+            this.project = project;
+        }
 
         #region Tasks
         public List<TaskInformation> GetTasksWithoutHierarhy()
@@ -51,18 +56,19 @@ namespace ProjectSuccessWPF
 
         private void GetTaskHierarhy(ref TaskInformation task)
         {
-            foreach (Task t in task.task.getChildTasks().toArray())
-            {
-                var assigments = t.getResourceAssignments().toArray();
-                List<Resource> list = new List<Resource>();
-                for (int i = 0; i < assigments.Length; ++i)
+            if (task.GetChildTasks() != null && task.GetChildTasks().Length > 0)
+                foreach (Task t in task.GetChildTasks())
                 {
-                    list.Add((assigments[i] as ResourceAssignment).getResource());
+                    var assigments = t.getResourceAssignments().toArray();
+                    List<Resource> list = new List<Resource>();
+                    for (int i = 0; i < assigments.Length; ++i)
+                    {
+                        list.Add((assigments[i] as ResourceAssignment).getResource());
+                    }
+                    TaskInformation taskInf = new TaskInformation(t, list);
+                    GetTaskHierarhy(ref taskInf);
+                    task.childTasks.Add(taskInf);
                 }
-                TaskInformation taskInf = new TaskInformation(t, list);
-                GetTaskHierarhy(ref taskInf);
-                task.childTasks.Add(taskInf);
-            }
         }
         #endregion
 
@@ -70,14 +76,15 @@ namespace ProjectSuccessWPF
         public List<ResourceInformation> GetResources()
         {
             List<ResourceInformation> list = new List<ResourceInformation>();
-            foreach(Resource res in project.getAllResources())
+            foreach (Resource res in project.getAllResources())
             {
-                ResourceInformation information = new ResourceInformation(res);
+                List<Task> tasks = new List<Task>();
                 var assigments = res.getTaskAssignments().toArray();
-                foreach(Task assigment in assigments)
+                foreach (var assigment in assigments)
                 {
-                    information.tasks.Add(assigment);
+                    tasks.Add(assigment as Task);
                 }
+                list.Add(new ResourceInformation(res, tasks));
             }
             return list;
         }

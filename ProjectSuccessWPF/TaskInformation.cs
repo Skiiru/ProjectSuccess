@@ -5,39 +5,67 @@ namespace ProjectSuccessWPF
 {
     class TaskInformation
     {
-        public Task task;
+        Task task;
         public List<Resource> resources;
-        public Duration duration;
-        public Duration overWorkDuration;
         public List<TaskInformation> childTasks;
+
+        public string taskName;
+        public string duration;
+        public string overtimeWork;
+        public int cost;
+        public float overCost;
+        public int completePecrentage;
 
         public TaskInformation(Task task, List<Resource> resources)
         {
             this.task = task;
             this.resources = resources;
-            duration = task.getActualDuration() == null? task.getDuration():task.getActualDuration();
-            overWorkDuration = task.getActualOvertimeWork() == null ? task.getOvertimeWork() : task.getActualOvertimeWork();
             childTasks = new List<TaskInformation>();
+
+            taskName = task.getName();
+            cost = task.getCost().intValue();
+            //duration = task.getDuration().toString();
+            completePecrentage = task.getPercentageComplete().intValue();
+            if (task.getOvertimeWork() != null)
+                overtimeWork = task.getOvertimeWork().toString();
+            else
+                overtimeWork = "0.0";
+            if (task.getOvertimeCost() != null)
+                overCost = task.getOvertimeCost().floatValue();
+            else
+                overCost = 0.0f;
         }
 
-        public Duration GetConvertedDuration(TimeUnit type, ProjectProperties properties)
+        //Don't working when retun type is Task
+        public object[] GetChildTasks()
         {
-            return duration.convertUnits(type, properties);
+            return task.getChildTasks().toArray();
         }
 
-        public Duration GetConvertedDuration(ProjectProperties properties)
+        public override string ToString()
         {
-            return GetConvertedDuration(TimeUnit.HOURS, properties);
+            string result = taskName + "(" + completePecrentage + "): D - " + duration + ", OD - " + overtimeWork + ", OC - " + overCost;
+            return base.ToString();
         }
 
-        public Duration GetConvertedOverwork(TimeUnit type, ProjectProperties props)
+        public string GetDurations()
         {
-            return overWorkDuration.convertUnits(type, props);
+            string result = string.Empty;
+            result = "продолжительность - " + duration;
+            if (overtimeWork != "0.0")
+                result += ", переработка - " + overtimeWork;
+            return result;
         }
 
-        public Duration GetConvertedOverwork(ProjectProperties props)
+        public int SubTusksCount()
         {
-            return overWorkDuration.convertUnits(TimeUnit.HOURS, props);
+            int count = 0;
+            foreach(TaskInformation t in childTasks)
+            {
+                count++;
+                count += t.SubTusksCount();
+            }
+            return count;
         }
     }
 }

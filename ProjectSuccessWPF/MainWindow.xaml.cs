@@ -30,24 +30,26 @@ namespace ProjectSuccessWPF
         {
             InitializeComponent();
             fileWorker = new MSProjectFileWorker();
-            projectAnalyzer = new MSProjectAnalyzer();
             builder = new PDFBuilder();
 
             openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "*.mpp";
+            openFileDialog.Filter = "Файлы MSProject|*.mpp";
 
             saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "*.pdf";
+            saveFileDialog.Filter = "PDF|*.pdf";
 
             #region Testing
-            fileWorker.ReadFile(@"C:\Users\Skiiru\Documents\Visual Studio 2017\Projects\ProjectSuccess\ProjectSuccessWPF\test.mpp");
-            projectAnalyzer.project = fileWorker.projectFile;
+            fileWorker.ReadFile(@"C:\Users\Skiiru\Documents\Visual Studio 2017\Projects\ProjectSuccess\ProjectSuccessWPF\test2.mpp");
+            projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
             tasks = projectAnalyzer.GetTasksWithHierarhy();
             TreeViewItem firstItem = new TreeViewItem();
             firstItem.Header = "Текущий проект";
             CreateTreeViewItems(tasks, ref firstItem);
             TasksTreeView.Items.Add(firstItem);
-            builder.CreateReport(@"test.pdf", tasks, projectAnalyzer.GetProjectProperties());
+
+            resources = projectAnalyzer.GetResources();
+
+            builder.CreateReport(@"test.pdf", tasks, resources, projectAnalyzer.GetProjectProperties());
             #endregion
         }
 
@@ -55,10 +57,16 @@ namespace ProjectSuccessWPF
         {
             foreach (TaskInformation taskInformation in tasks)
             {
-                TreeViewItem treeViewItem = new TreeViewItem();
-                treeViewItem.IsExpanded = true;
-                treeViewItem.Header = "Задача \"" + taskInformation.task.getName() + '\"';
-                treeViewItem.Items.Add("Продолжительность: " + taskInformation.GetConvertedDuration(projectAnalyzer.project.getProjectProperties()));
+                TreeViewItem treeViewItem = new TreeViewItem
+                {
+                    IsExpanded = true,
+                    Header = "Задача \"" + taskInformation.taskName + "\" (" + taskInformation.completePecrentage + "%)"
+                };
+                treeViewItem.Items.Add("Продолжительность: " + taskInformation.duration);
+                if (taskInformation.overtimeWork != "0.0")
+                    treeViewItem.Items.Add("Переработка: " + taskInformation.overtimeWork);
+                if (taskInformation.overCost != 0.0)
+                    treeViewItem.Items.Add("Перерасход: " + taskInformation.overCost);
                 TreeViewItem resourcesItem = new TreeViewItem();
                 resourcesItem.IsExpanded = true;
                 if (taskInformation.resources.Count != 0)
@@ -98,7 +106,7 @@ namespace ProjectSuccessWPF
             }
             else
                 ShowError("Ошибка при открытии файла.");
-            
+
         }
 
         void SaveFile()

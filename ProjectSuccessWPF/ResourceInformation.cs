@@ -7,42 +7,25 @@ namespace ProjectSuccessWPF
 {
     class ResourceInformation
     {
-        public Resource resource;
+        Resource resource;
         public List<Task> tasks;
-        public Duration overtimeWorkDuration;
-        public Duration workDuration;
+        public string overtimeWorkDuration;
+        public string workDuration;
+        public string cost;
+
+        public string resourceName;
 
         public ResourceInformation(Resource resource, List<Task> tasks)
         {
             this.resource = resource;
-            this.tasks = tasks;
-            overtimeWorkDuration = resource.getActualOvertimeWork() == null ? resource.getOvertimeWork() : resource.getActualOvertimeWork();
-            workDuration = resource.getActualWork() == null ? resource.getWork() : resource.getActualWork();
+            resourceName = resource.getName() ?? "Undefined";
+            this.tasks = tasks ?? new List<Task>();
+            cost = resource.getCost().toString() ?? "Undefined";
+            overtimeWorkDuration = resource.getOvertimeWork().toString() ?? "Undefined";
+            workDuration = resource.getWorkVariance().toString() ?? "Undefined";
         }
 
-        public ResourceInformation(Resource resource)
-        {
-            new ResourceInformation(resource, new List<Task>());
-        }
-
-        public Duration GetConvertedWorkDuration(TimeUnit type, ProjectProperties properties)
-        {
-            return workDuration.convertUnits(type, properties);
-        }
-
-        public Duration GetConvertedWorkDuration(ProjectProperties properties)
-        {
-            return GetConvertedWorkDuration(TimeUnit.HOURS, properties);
-        }
-
-        public Duration GetConvertedOverworkDuration(TimeUnit type, ProjectProperties props)
-        {
-            return overtimeWorkDuration.convertUnits(type, props);
-        }
-
-        public Duration GetConvertedOverworkDuration(ProjectProperties props)
-        {
-            return overtimeWorkDuration.convertUnits(TimeUnit.HOURS, props);
-        }
+        public ResourceInformation(Resource resource) : this(resource, new List<Task>())
+        { }
     }
 }
