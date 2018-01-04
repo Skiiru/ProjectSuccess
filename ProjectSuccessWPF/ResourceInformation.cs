@@ -8,19 +8,25 @@ namespace ProjectSuccessWPF
     class ResourceInformation
     {
         Resource resource;
-        public List<Task> tasks;
-        public string overtimeWorkDuration;
-        public string workDuration;
-        public float cost;
+        List<Task> tasks;
+        public string ResourceName { get; private set; }
+        public string GroupName { get; private set; }
+        public float CostPerTimeUnit { get; private set; }
+        public float Cost { get; private set; }
+        public string WorkDuration { get; private set; }
+        public string OvertimeWorkDuration { get; private set; }
+        public float OvertimeWorkCost { get; private set; }
 
-        public string resourceName;
 
         public ResourceInformation(Resource resource, List<Task> tasks)
         {
             this.resource = resource;
-            resourceName = resource.getName() ?? "Undefined";
+            ResourceName = resource.getName() ?? "Undefined";
             this.tasks = tasks ?? new List<Task>();
-            cost = resource.getCost().floatValue();
+            Cost = resource.getCost().floatValue();
+            WorkDuration = resource.getBaselineWork().toString();
+            CostPerTimeUnit = Convert.ToSingle(Cost / Convert.ToDouble(WorkDuration.Remove(WorkDuration.Length - 3)));
+            GroupName = resource.getGroup();
 
             Duration baselineWork = resource.getBaselineWork();
             if (baselineWork != null)
@@ -30,13 +36,15 @@ namespace ProjectSuccessWPF
                 {
                     //Sometimes there is a null task
                     if (t != null)
+                    {
                         duration += t.getWork().getDuration();
+                    }
                 }
-                overtimeWorkDuration = (duration - baselineWork.getDuration()).ToString() + baselineWork.getUnits().toString();
+                OvertimeWorkDuration = (duration - baselineWork.getDuration()).ToString() + baselineWork.getUnits().toString();
+                OvertimeWorkCost = float.Parse(OvertimeWorkDuration.Remove(OvertimeWorkDuration.Length - 1)) * CostPerTimeUnit;
             }
             else
-                overtimeWorkDuration = "Undefined";
-            workDuration = resource.getBaselineWork().toString() ?? "Undefined";
+                OvertimeWorkDuration = "Undefined";
         }
 
         public ResourceInformation(Resource resource) : this(resource, new List<Task>())

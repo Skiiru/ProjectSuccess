@@ -31,19 +31,24 @@ namespace ProjectSuccessWPF
             InitializeComponent();
             fileWorker = new MSProjectFileWorker();
             builder = new PDFBuilder();
+            openFileDialog = new OpenFileDialog
+            {
+                Filter = "Файлы MSProject|*.mpp"
+            };
 
-            openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Файлы MSProject|*.mpp";
-
-            saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PDF|*.pdf";
+            saveFileDialog = new SaveFileDialog
+            {
+                Filter = "PDF|*.pdf"
+            };
 
             #region Testing
             fileWorker.ReadFile(@"C:\Users\Skiiru\Documents\Visual Studio 2017\Projects\ProjectSuccess\ProjectSuccessWPF\test2.mpp");
             projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
             tasks = projectAnalyzer.GetTasksWithHierarhy();
-            TreeViewItem firstItem = new TreeViewItem();
-            firstItem.Header = "Текущий проект";
+            TreeViewItem firstItem = new TreeViewItem
+            {
+                Header = "Текущий проект"
+            };
             CreateTreeViewItems(tasks, ref firstItem);
             TasksTreeView.Items.Add(firstItem);
 
@@ -51,6 +56,8 @@ namespace ProjectSuccessWPF
 
             builder.CreateReport(@"test.pdf", tasks, resources, projectAnalyzer.GetProjectProperties());
             #endregion
+
+            ResourcesDataGrid.ItemsSource = resources;
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -60,37 +67,39 @@ namespace ProjectSuccessWPF
                 TreeViewItem treeViewItem = new TreeViewItem
                 {
                     IsExpanded = true,
-                    Header = "Задача \"" + taskInformation.taskName + "\" (" + taskInformation.completePecrentage + "%)"
+                    Header = "Задача \"" + taskInformation.TaskName + "\" (" + taskInformation.CompletePecrentage + "%)"
                 };
-                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.baselineDuration);
-                if (!taskInformation.duration.StartsWith("0.0"))
-                    treeViewItem.Items.Add("Продолжительность: " + taskInformation.duration);
-                if (taskInformation.overtimeWork != "0.0")
-                    treeViewItem.Items.Add("Переработка: " + taskInformation.overtimeWork);
-                if (taskInformation.cost != 0)
-                    treeViewItem.Items.Add("Стоимость: " + taskInformation.cost);
-                if (taskInformation.overCost != 0.0)
-                    treeViewItem.Items.Add("Перерасход: " + taskInformation.overCost);
+                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.BaselineDuration);
+                if (!taskInformation.Duration.StartsWith("0.0"))
+                    treeViewItem.Items.Add("Продолжительность: " + taskInformation.Duration);
+                if (taskInformation.OvertimeWork != "0.0")
+                    treeViewItem.Items.Add("Переработка: " + taskInformation.OvertimeWork);
+                if (taskInformation.Cost != 0)
+                    treeViewItem.Items.Add("Стоимость: " + taskInformation.Cost);
+                if (taskInformation.OverCost != 0.0)
+                    treeViewItem.Items.Add("Перерасход: " + taskInformation.OverCost);
                 TreeViewItem resourcesItem = new TreeViewItem
                 {
                     IsExpanded = true
                 };
-                if (taskInformation.resources.Count != 0)
+                if (taskInformation.Resources.Count != 0)
                 {
                     resourcesItem.Header = "Ресурсы";
-                    foreach (Resource resource in taskInformation.resources)
+                    foreach (Resource resource in taskInformation.Resources)
                     {
                         resourcesItem.Items.Add(resource.getName());
 
                     }
                     treeViewItem.Items.Add(resourcesItem);
                 }
-                if (taskInformation.childTasks.Count != 0)
+                if (taskInformation.ChildTasks.Count != 0)
                 {
-                    TreeViewItem subTusks = new TreeViewItem();
-                    subTusks.IsExpanded = true;
-                    subTusks.Header = "Подзадачи";
-                    CreateTreeViewItems(taskInformation.childTasks, ref subTusks);
+                    TreeViewItem subTusks = new TreeViewItem
+                    {
+                        IsExpanded = true,
+                        Header = "Подзадачи"
+                    };
+                    CreateTreeViewItems(taskInformation.ChildTasks, ref subTusks);
                     treeViewItem.Items.Add(subTusks);
                 }
                 item.IsExpanded = true;

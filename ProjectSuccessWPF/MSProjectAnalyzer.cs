@@ -71,7 +71,7 @@ namespace ProjectSuccessWPF
                     }
                     TaskInformation taskInf = new TaskInformation(t, list);
                     GetTaskHierarhy(ref taskInf);
-                    task.childTasks.Add(taskInf);
+                    task.ChildTasks.Add(taskInf);
                 }
         }
         #endregion
@@ -84,11 +84,14 @@ namespace ProjectSuccessWPF
             {
                 List<Task> tasks = new List<Task>();
                 var assigments = res.getTaskAssignments().toArray();
-                foreach (var assigment in assigments)
+                if (res.getName() != null)
                 {
-                    tasks.Add((assigment as ResourceAssignment).getTask());
+                    foreach (var assigment in assigments)
+                    {
+                        tasks.Add((assigment as ResourceAssignment).getTask());
+                    }
+                    list.Add(new ResourceInformation(res, tasks));
                 }
-                list.Add(new ResourceInformation(res, tasks));
             }
             return list;
         }

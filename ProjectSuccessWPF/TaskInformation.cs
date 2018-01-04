@@ -6,68 +6,72 @@ namespace ProjectSuccessWPF
     class TaskInformation
     {
         Task task;
-        public List<Resource> resources;
-        public List<TaskInformation> childTasks;
+        public List<Resource> Resources { get; private set; }
+        public List<TaskInformation> ChildTasks { get; private set; }
 
-        static string ERR_ISNOT_IN_BASELINE = "This task is not in baseline.";
+        static string ERRMSG_ISNOT_IN_BASELINE = "Этой задачи нет в базовом плане.";
 
-        public string taskName;
-        public string startDate;
-        public string startDateBaseline;
-        public string finishDate;
-        public string finishDateBaseline;
-        public string duration;
-        public string overtimeWork;
-        public string baselineDuration;
-        public int cost;
-        public int actualCost;
-        public int remainingCost;
-        public float overCost;
-        public int completePecrentage;
+        public string TaskName { get; private set; }
+
+        //Dates
+        public string StartDate { get; private set; }
+        public string StartDateBaseline { get; private set; }
+        public string FinishDate { get; private set; }
+        public string FinishDateBaseline { get; private set; }
+        public string Duration { get; private set; }
+
+
+        public string OvertimeWork { get; private set; }
+        public string BaselineDuration { get; private set; }
+        public int Cost { get; private set; }
+        public int ActualCost { get; private set; }
+        public int RemainingCost { get; private set; }
+        public float OverCost { get; private set; }
+        public int CompletePecrentage { get; private set; }
 
         public TaskInformation(Task task, List<Resource> resources)
         {
             this.task = task;
-            this.resources = resources;
-            childTasks = new List<TaskInformation>();
+            this.Resources = resources;
+            ChildTasks = new List<TaskInformation>();
 
             //Dates
-            startDate = task.getStart().toString();
-            finishDate = task.getFinish().toString();
+            StartDate = task.getStart().toString();
+            FinishDate = task.getFinish().toString();
             if (task.getBaselineStart() != null && task.getBaselineFinish() != null)
             {
-                startDateBaseline = task.getBaselineStart().toString();
-                finishDateBaseline = task.getBaselineFinish().toString();
+                StartDateBaseline = task.getBaselineStart().toString();
+                FinishDateBaseline = task.getBaselineFinish().toString();
             }
             else
             {
-                startDateBaseline = finishDateBaseline = ERR_ISNOT_IN_BASELINE;
+                StartDateBaseline = FinishDateBaseline = ERRMSG_ISNOT_IN_BASELINE;
             }
 
             Duration baselineDuration = task.getBaselineDuration();
             if (baselineDuration != null)
             {
                 Duration duration = task.getDuration();
-                this.baselineDuration = baselineDuration.toString();
+                this.BaselineDuration = baselineDuration.toString();
                 if (baselineDuration.getUnits() == duration.getUnits())
-                    overtimeWork = (duration.getDuration() - baselineDuration.getDuration()).ToString() + duration.getUnits().toString();
+                    OvertimeWork = (duration.getDuration() - baselineDuration.getDuration()).ToString() + duration.getUnits().toString();
                 else
                 {
                     if (baselineDuration.compareTo(duration) > 0)
-                        overtimeWork = "Convertation problems. Plese make sure that all duration parameters have same time units.";
+                        OvertimeWork = "Convertation problems. Plese make sure that all duration parameters have same time units.";
                     else
-                        overtimeWork = "0.0";
+                        OvertimeWork = "0.0";
                 }
             }
             else
-                this.baselineDuration = overtimeWork = ERR_ISNOT_IN_BASELINE;
-            overCost = task.getCost().floatValue() - task.getBaselineCost().floatValue();
-            taskName = task.getName();
-            cost = task.getCost().intValue();
-            actualCost = task.getActualCost().intValue();
-            remainingCost = task.getRemainingCost().intValue();
-            this.duration = task.getDuration().toString();
-            completePecrentage = task.getPercentageComplete().intValue();
+                this.BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
+            OverCost = task.getCost().floatValue() - task.getBaselineCost().floatValue();
+            TaskName = task.getName();
+            Cost = task.getCost().intValue();
+            ActualCost = task.getActualCost().intValue();
+            RemainingCost = task.getRemainingCost().intValue();
+            this.Duration = task.getDuration().toString();
+            CompletePecrentage = task.getPercentageComplete().intValue();
         }
 
         //Don't working when retun type is Task
@@ -82,23 +86,23 @@ namespace ProjectSuccessWPF
 
         public override string ToString()
         {
-            string result = taskName + "(" + completePecrentage + "): D - " + duration + ", OD - " + overtimeWork + ", OC - " + overCost;
+            string result = TaskName + "(" + CompletePecrentage + "): D - " + Duration + ", OD - " + OvertimeWork + ", OC - " + OverCost;
             return base.ToString();
         }
 
         public string GetDurations()
         {
-            string result = "плановая продолжительность - " + baselineDuration + " (" + startDate + " - " + finishDate + ")";
-            result += ", продолжительность - " + duration;
-            if (overtimeWork != "0.0")
-                result += ", переработка - " + overtimeWork;
+            string result = "плановая продолжительность - " + BaselineDuration + " (" + StartDate + " - " + FinishDate + ")";
+            result += ", продолжительность - " + Duration;
+            if (OvertimeWork != "0.0")
+                result += ", переработка - " + OvertimeWork;
             return result;
         }
 
         public int SubTusksCount()
         {
             int count = 0;
-            foreach (TaskInformation t in childTasks)
+            foreach (TaskInformation t in ChildTasks)
             {
                 count++;
                 count += t.SubTusksCount();

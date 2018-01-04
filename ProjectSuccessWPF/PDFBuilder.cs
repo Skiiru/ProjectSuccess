@@ -53,13 +53,15 @@ namespace ProjectSuccessWPF
                 level++;
                 string currentLevelString = levelStr + "." + level.ToString();
                 string paragraphText =
-                   currentLevelString + ". \"" + t.taskName + "\" (" + t.completePecrentage + "%) : " +
+                   currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePecrentage + "%) : " +
                    t.GetDurations() +
-                   ", стоимость - " + t.cost + projectProps.getCurrencySymbol() +
-                   ", оставшаяся стоимость - " + t.remainingCost + projectProps.getCurrencySymbol() + ", ресурсы - ";
-                if (t.resources.Count != 0)
+                   ", стоимость - " + t.Cost + projectProps.getCurrencySymbol() +
+                   ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() + 
+                   ", перерасход - " + t.OverCost + projectProps.getCurrencySymbol() +
+                   ", ресурсы - ";
+                if (t.Resources.Count != 0)
                 {
-                    foreach (Resource res in t.resources)
+                    foreach (Resource res in t.Resources)
                         paragraphText += res.getName() + ", ";
                     //Replasing "," with "." after last item
                     paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
@@ -68,7 +70,7 @@ namespace ProjectSuccessWPF
                     paragraphText += "указаны в подзадачах либо отсутствуют.";
 
                 document.Add(CreateParagraph(paragraphText, textFontSize, false));
-                ParseTaskHierarhyIntoText(t.childTasks, currentLevelString, projectProps);
+                ParseTaskHierarhyIntoText(t.ChildTasks, currentLevelString, projectProps);
             }
         }
 
@@ -84,19 +86,24 @@ namespace ProjectSuccessWPF
 
             int projectCost = projectProps.getBaselineCost().intValue();
             int cost = projectCost;
+            float overcost = 0;
             int taskCount = 0;
             int remainProjectCost = projectProps.getBaselineCost().intValue() - projectProps.getActualCost().intValue();
             int remainCost = remainProjectCost;
             foreach (TaskInformation t in tasks)
             {
                 taskCount += t.SubTusksCount();
+                overcost += t.OverCost;
                 if (projectCost == 0)
-                    cost += t.cost;
+                    cost += t.Cost;
                 if (remainProjectCost == 0)
-                    remainCost += t.remainingCost;
+                    remainCost += t.RemainingCost;
             }
 
-            string projectCostStr = cost + projectProps.getCurrencySymbol() + " (осталось - " + remainCost + "" + projectProps.getCurrencySymbol() + ")";
+            string projectCostStr = 
+                cost + projectProps.getCurrencySymbol() + 
+                " (осталось - " + remainCost + projectProps.getCurrencySymbol() + ") " +
+                "перерасход - " + overcost + projectProps.getCurrencySymbol();
             string projectTime = projectProps.getStartDate().toString() + " - " + projectProps.getFinishDate();
 
             document.Add(CreatePhrase("сроки проекта: " + projectTime + "; стоимость проекта: " + projectCostStr, textFontSize, false));
@@ -111,13 +118,13 @@ namespace ProjectSuccessWPF
             foreach (TaskInformation t in tasks)
             {
                 level++;
-                string paragraphText = level.ToString() + ". \"" + t.taskName + "\": " + t.GetDurations();
-                if (t.overtimeWork != "0.0")
-                    paragraphText += ", переработка - " + t.overtimeWork;
+                string paragraphText = level.ToString() + ". \"" + t.TaskName + "\": " + t.GetDurations();
+                if (t.OvertimeWork != "0.0")
+                    paragraphText += ", переработка - " + t.OvertimeWork;
                 paragraphText += ", ресурсы - ";
-                if (t.resources.Count != 0)
+                if (t.Resources.Count != 0)
                 {
-                    foreach (Resource res in t.resources)
+                    foreach (Resource res in t.Resources)
                         paragraphText += res.getName() + ", ";
                     //Replasing "," with "." after last item
                     paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
@@ -126,7 +133,7 @@ namespace ProjectSuccessWPF
                     paragraphText += "указаны в подзадачах либо отсутствуют.";
 
                 document.Add(CreateParagraph(paragraphText, textFontSize, false));
-                ParseTaskHierarhyIntoText(t.childTasks, level.ToString(), projectProps);
+                ParseTaskHierarhyIntoText(t.ChildTasks, level.ToString(), projectProps);
             }
             #endregion
 
@@ -138,9 +145,9 @@ namespace ProjectSuccessWPF
             foreach (ResourceInformation resInf in resources)
             {
                 //Sometimes there is "fake" resource in project, idk why
-                if (resInf.resourceName != "Undefined")
+                if (resInf.ResourceName != "Undefined")
                     document.Add(CreateParagraph(
-                        resInf.resourceName + " (" + resInf.cost + "): время работы - " + resInf.workDuration + ", переработки - " + resInf.overtimeWorkDuration,
+                        resInf.ResourceName + " (" + resInf.Cost + "): время работы - " + resInf.WorkDuration + ", переработки - " + resInf.OvertimeWorkDuration,
                         textFontSize,
                         false));
             }
