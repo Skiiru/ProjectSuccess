@@ -11,7 +11,7 @@ namespace ProjectSuccessWPF
         public List<Task> tasks;
         public string overtimeWorkDuration;
         public string workDuration;
-        public string cost;
+        public float cost;
 
         public string resourceName;
 
@@ -20,9 +20,23 @@ namespace ProjectSuccessWPF
             this.resource = resource;
             resourceName = resource.getName() ?? "Undefined";
             this.tasks = tasks ?? new List<Task>();
-            cost = resource.getCost().toString() ?? "Undefined";
-            overtimeWorkDuration = resource.getOvertimeWork().toString() ?? "Undefined";
-            workDuration = resource.getWorkVariance().toString() ?? "Undefined";
+            cost = resource.getCost().floatValue();
+
+            Duration baselineWork = resource.getBaselineWork();
+            if (baselineWork != null)
+            {
+                double duration = 0;
+                foreach (Task t in tasks)
+                {
+                    //Sometimes there is a null task
+                    if (t != null)
+                        duration += t.getWork().getDuration();
+                }
+                overtimeWorkDuration = (duration - baselineWork.getDuration()).ToString() + baselineWork.getUnits().toString();
+            }
+            else
+                overtimeWorkDuration = "Undefined";
+            workDuration = resource.getBaselineWork().toString() ?? "Undefined";
         }
 
         public ResourceInformation(Resource resource) : this(resource, new List<Task>())

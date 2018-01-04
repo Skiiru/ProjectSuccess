@@ -111,7 +111,7 @@ namespace ProjectSuccessWPF
             foreach (TaskInformation t in tasks)
             {
                 level++;
-                string paragraphText = level.ToString() + ". \"" + t.taskName + "\": " + t.GetDurations();//продолжительность - " + t.GetDuration(projectProps);
+                string paragraphText = level.ToString() + ". \"" + t.taskName + "\": " + t.GetDurations();
                 if (t.overtimeWork != "0.0")
                     paragraphText += ", переработка - " + t.overtimeWork;
                 paragraphText += ", ресурсы - ";

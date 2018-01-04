@@ -62,13 +62,19 @@ namespace ProjectSuccessWPF
                     IsExpanded = true,
                     Header = "Задача \"" + taskInformation.taskName + "\" (" + taskInformation.completePecrentage + "%)"
                 };
-                treeViewItem.Items.Add("Продолжительность: " + taskInformation.duration);
+                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.baselineDuration);
+                if (!taskInformation.duration.StartsWith("0.0"))
+                    treeViewItem.Items.Add("Продолжительность: " + taskInformation.duration);
                 if (taskInformation.overtimeWork != "0.0")
                     treeViewItem.Items.Add("Переработка: " + taskInformation.overtimeWork);
+                if (taskInformation.cost != 0)
+                    treeViewItem.Items.Add("Стоимость: " + taskInformation.cost);
                 if (taskInformation.overCost != 0.0)
                     treeViewItem.Items.Add("Перерасход: " + taskInformation.overCost);
-                TreeViewItem resourcesItem = new TreeViewItem();
-                resourcesItem.IsExpanded = true;
+                TreeViewItem resourcesItem = new TreeViewItem
+                {
+                    IsExpanded = true
+                };
                 if (taskInformation.resources.Count != 0)
                 {
                     resourcesItem.Header = "Ресурсы";

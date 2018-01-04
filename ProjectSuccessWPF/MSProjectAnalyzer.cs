@@ -86,7 +86,7 @@ namespace ProjectSuccessWPF
                 var assigments = res.getTaskAssignments().toArray();
                 foreach (var assigment in assigments)
                 {
-                    tasks.Add(assigment as Task);
+                    tasks.Add((assigment as ResourceAssignment).getTask());
                 }
                 list.Add(new ResourceInformation(res, tasks));
             }
