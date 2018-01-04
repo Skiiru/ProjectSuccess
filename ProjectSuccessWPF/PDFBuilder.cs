@@ -53,7 +53,10 @@ namespace ProjectSuccessWPF
                 level++;
                 string currentLevelString = levelStr + "." + level.ToString();
                 string paragraphText =
-                   currentLevelString + ". \"" + t.taskName + "\" (" + t.completePecrentage + ") : " + t.GetDurations() + ", ресурсы - ";
+                   currentLevelString + ". \"" + t.taskName + "\" (" + t.completePecrentage + "%) : " +
+                   t.GetDurations() +
+                   ", стоимость - " + t.cost + projectProps.getCurrencySymbol() +
+                   ", оставшаяся стоимость - " + t.remainingCost + projectProps.getCurrencySymbol() + ", ресурсы - ";
                 if (t.resources.Count != 0)
                 {
                     foreach (Resource res in t.resources)
@@ -79,19 +82,26 @@ namespace ProjectSuccessWPF
 
             document.Add(CreatePhrase(Environment.NewLine + "Инфомация о проекте: ", textFontSize, true));
 
-            string cost = projectProps.getBaselineCost().toString();
-            int remainCost = projectProps.getBaselineCost().intValue() - projectProps.getActualCost().intValue();
-            string projectCost = cost + " (осталось - " + remainCost.ToString() + "" + projectProps.getCurrencySymbol() + ")";
-            string projectTime = projectProps.getStartDate().toString() + " - " + projectProps.getFinishDate();
-
-            document.Add(CreatePhrase("сроки проекта: " + projectTime + "; стоимость проекта: " + projectCost, textFontSize, false));
-            document.Add(CreatePhrase("; число ресурсов - " + resources.Count, textFontSize, false));
-
+            int projectCost = projectProps.getBaselineCost().intValue();
+            int cost = projectCost;
             int taskCount = 0;
+            int remainProjectCost = projectProps.getBaselineCost().intValue() - projectProps.getActualCost().intValue();
+            int remainCost = remainProjectCost;
             foreach (TaskInformation t in tasks)
             {
                 taskCount += t.SubTusksCount();
+                if (projectCost == 0)
+                    cost += t.cost;
+                if (remainProjectCost == 0)
+                    remainCost += t.remainingCost;
             }
+
+            string projectCostStr = cost + projectProps.getCurrencySymbol() + " (осталось - " + remainCost + "" + projectProps.getCurrencySymbol() + ")";
+            string projectTime = projectProps.getStartDate().toString() + " - " + projectProps.getFinishDate();
+
+            document.Add(CreatePhrase("сроки проекта: " + projectTime + "; стоимость проекта: " + projectCostStr, textFontSize, false));
+            document.Add(CreatePhrase("; число ресурсов - " + resources.Count, textFontSize, false));
+
             document.Add(CreatePhrase("; всего задач - " + taskCount + "." + Environment.NewLine, textFontSize, false));
 
             #region Tasks
@@ -127,10 +137,12 @@ namespace ProjectSuccessWPF
             document.Add(CreateParagraph("Список ресурсов", headerFontSize, true));
             foreach (ResourceInformation resInf in resources)
             {
-                document.Add(CreateParagraph(
-                    resInf.resourceName + " (" + resInf.cost + "): время работы - " + resInf.workDuration + ", переработки - " + resInf.overtimeWorkDuration,
-                    textFontSize,
-                    false));
+                //Sometimes there is "fake" resource in project, idk why
+                if (resInf.resourceName != "Undefined")
+                    document.Add(CreateParagraph(
+                        resInf.resourceName + " (" + resInf.cost + "): время работы - " + resInf.workDuration + ", переработки - " + resInf.overtimeWorkDuration,
+                        textFontSize,
+                        false));
             }
 
             #endregion

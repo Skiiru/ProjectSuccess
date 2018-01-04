@@ -13,6 +13,8 @@ namespace ProjectSuccessWPF
         public string duration;
         public string overtimeWork;
         public int cost;
+        public int actualCost;
+        public int remainingCost;
         public float overCost;
         public int completePecrentage;
 
@@ -24,12 +26,15 @@ namespace ProjectSuccessWPF
 
             taskName = task.getName();
             cost = task.getCost().intValue();
-            //duration = task.getDuration().toString();
+            actualCost = task.getActualCost().intValue();
+            remainingCost = task.getRemainingCost().intValue();
+            duration = task.getDuration().toString();
             completePecrentage = task.getPercentageComplete().intValue();
             if (task.getOvertimeWork() != null)
                 overtimeWork = task.getOvertimeWork().toString();
             else
                 overtimeWork = "0.0";
+
             if (task.getOvertimeCost() != null)
                 overCost = task.getOvertimeCost().floatValue();
             else

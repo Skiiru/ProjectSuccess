@@ -37,18 +37,22 @@ namespace ProjectSuccessWPF
 
             int level = 0;
 
+            //First item in hierarhy is project file first name, so we need to ignore it
             foreach (Task firstOrderTask in project.getChildTasks().toArray())
             {
-                level++;
-                var assigments = firstOrderTask.getResourceAssignments().toArray();
-                List<Resource> list = new List<Resource>();
-                for (int i = 0; i < assigments.Length; ++i)
+                foreach (Task normalTask in firstOrderTask.getChildTasks().toArray())
                 {
-                    list.Add((assigments[i] as ResourceAssignment).getResource());
+                    level++;
+                    var assigments = normalTask.getResourceAssignments().toArray();
+                    List<Resource> list = new List<Resource>();
+                    for (int i = 0; i < assigments.Length; ++i)
+                    {
+                        list.Add((assigments[i] as ResourceAssignment).getResource());
+                    }
+                    TaskInformation task = new TaskInformation(normalTask, list);
+                    GetTaskHierarhy(ref task);
+                    taskList.Add(task);
                 }
-                TaskInformation task = new TaskInformation(firstOrderTask, list);
-                GetTaskHierarhy(ref task);
-                taskList.Add(task);
             }
 
             return taskList;
