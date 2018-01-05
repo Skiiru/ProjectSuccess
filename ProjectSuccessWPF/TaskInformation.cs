@@ -19,6 +19,7 @@ namespace ProjectSuccessWPF
         public string FinishDate { get; private set; }
         public string FinishDateBaseline { get; private set; }
         public string Duration { get; private set; }
+        public double DurationValue { get; private set; }
 
 
         public string OvertimeWork { get; private set; }
@@ -64,13 +65,14 @@ namespace ProjectSuccessWPF
                 }
             }
             else
-                this.BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
+                BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
             OverCost = task.getCost().floatValue() - task.getBaselineCost().floatValue();
             TaskName = task.getName();
             Cost = task.getCost().intValue();
             ActualCost = task.getActualCost().intValue();
             RemainingCost = task.getRemainingCost().intValue();
-            this.Duration = task.getDuration().toString();
+            Duration = task.getDuration().toString();
+            DurationValue = TimeUnitStringConverter.ConvertTime(Duration);
             CompletePecrentage = task.getPercentageComplete().intValue();
         }
 

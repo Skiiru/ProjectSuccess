@@ -16,18 +16,22 @@ namespace ProjectSuccessWPF
         public List<TaskInformation> GetTasksWithoutHierarhy()
         {
             List<TaskInformation> taskList = new List<TaskInformation>();
-            foreach (Task task in project.getAllTasks())
+            foreach (TaskInformation t in this.GetTasksWithHierarhy())
             {
-                var assigments = task.getResourceAssignments().toArray();
-                List<Resource> list = new List<Resource>();
-                for (int i = 0; i < assigments.Length; ++i)
-                {
-                    list.Add((assigments[i] as ResourceAssignment).getResource());
-                }
-                taskList.Add(new TaskInformation(task, list));
+                taskList.AddRange(GetFinalTasks(t));
             }
-
             return taskList;
+        }
+
+        List<TaskInformation> GetFinalTasks(TaskInformation taskInf)
+        {
+            List<TaskInformation> result = new List<TaskInformation>();
+            if (taskInf.ChildTasks.Count == 0)
+                result.Add(taskInf);
+            else
+                foreach (TaskInformation t in taskInf.ChildTasks)
+                    result.AddRange(GetFinalTasks(t));
+            return result;
         }
 
         public List<TaskInformation> GetTasksWithHierarhy()

@@ -14,6 +14,7 @@ namespace ProjectSuccessWPF
         public float CostPerTimeUnit { get; private set; }
         public float Cost { get; private set; }
         public string WorkDuration { get; private set; }
+        public double WorkDurationValue { get; private set; }
         public string OvertimeWorkDuration { get; private set; }
         public float OvertimeWorkCost { get; private set; }
 
@@ -25,6 +26,7 @@ namespace ProjectSuccessWPF
             this.tasks = tasks ?? new List<Task>();
             Cost = resource.getCost().floatValue();
             WorkDuration = resource.getBaselineWork().toString();
+            WorkDurationValue = TimeUnitStringConverter.ConvertTime(WorkDuration);
             CostPerTimeUnit = Convert.ToSingle(Cost / Convert.ToDouble(WorkDuration.Remove(WorkDuration.Length - 3)));
             GroupName = resource.getGroup();
 

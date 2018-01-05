@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using Microsoft.Win32;
 using net.sf.mpxj;
 using System;
 using System.Collections.Generic;
@@ -20,11 +22,19 @@ namespace ProjectSuccessWPF
         List<TaskInformation> tasks;
         List<ResourceInformation> resources;
 
+        string currencySymbol;
+        string resourcesWorktimeSymbol;
+        string taskDurationSymbol;
+        double hoursPerDay;
+
         //Files
         string mppFilePath;
         OpenFileDialog openFileDialog;
         string reportFilePath;
         SaveFileDialog saveFileDialog;
+
+        //Charts
+        public string[] TaskChartAxisXLabels { get; private set; }
 
         public MainWindow()
         {
@@ -57,7 +67,20 @@ namespace ProjectSuccessWPF
             builder.CreateReport(@"test.pdf", tasks, resources, projectAnalyzer.GetProjectProperties());
             #endregion
 
+            hoursPerDay = projectAnalyzer.GetProjectProperties().getMinutesPerDay().doubleValue() / 60;
             ResourcesDataGrid.ItemsSource = resources;
+            currencySymbol = projectAnalyzer.GetProjectProperties().getCurrencySymbol();
+            string forTaskSymbol = projectAnalyzer.GetProjectProperties().getBaselineDuration().toString();
+            taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
+            string forResourcesSymbol = resources[0].WorkDuration;
+            resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
+
+            //Charts
+            TaskCostChart.Series = CreateTasksCostCostColumnSeries();
+            TasksDurationChart.Series = CreateTasksDurationCostColumnSeries();
+            ResourcesCostPieChart.Series = CreateResourcesCostPieSeries();
+            ResourcesWorktimePieChart.Series = CreateResourcesWortimePieSeries();
+
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -131,6 +154,78 @@ namespace ProjectSuccessWPF
                 reportFilePath = saveFileDialog.FileName;
             else
                 ShowError("Ошибка при сохранении файла.");
+        }
+
+        SeriesCollection CreateTasksCostCostColumnSeries()
+        {
+            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
+            TaskChartAxisXLabels = new string[tasks.Count];
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < tasks.Count; ++i)
+            {
+                collection.Add(new ColumnSeries
+                {
+                    Title = tasks[i].TaskName,
+                    Values = new ChartValues<double> { tasks[i].Cost },
+                });
+                TaskChartAxisXLabels[i] = tasks[i].TaskName;
+            }
+            TaskCostChart.AxisX[0].Title = "Задачи";
+            TaskCostChart.AxisY[0].Title = "Цена, " + currencySymbol;
+            TaskCostChart.AxisX[0].Labels = TaskChartAxisXLabels;
+            return collection;
+        }
+
+        SeriesCollection CreateTasksDurationCostColumnSeries()
+        {
+            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < tasks.Count; ++i)
+            {
+                collection.Add(new ColumnSeries
+                {
+                    Title = tasks[i].TaskName,
+                    Values = new ChartValues<double> { tasks[i].DurationValue },
+                });
+                TaskChartAxisXLabels[i] = tasks[i].TaskName;
+            }
+            TasksDurationChart.AxisX[0].Title = "Задачи";
+            TasksDurationChart.AxisY[0].Title = "Продолжительность, " + taskDurationSymbol;
+            return collection;
+        }
+
+        SeriesCollection CreateResourcesCostPieSeries()
+        {
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < resources.Count; ++i)
+            {
+                collection.Add(new PieSeries
+                {
+                    Title = resources[i].ResourceName,
+                    Values = new ChartValues<double> { resources[i].Cost },
+                    DataLabels = true
+                });
+            }
+            return collection;
+        }
+
+        SeriesCollection CreateResourcesWortimePieSeries()
+        {
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < resources.Count; ++i)
+            {
+                collection.Add(new PieSeries
+                {
+                    Title = resources[i].ResourceName,
+                    Values = new ChartValues<double> { resources[i].WorkDurationValue },
+                    DataLabels = true
+                });
+            }
+            return collection;
+        }
+
+        private void TasksChart_DataHover(object sender, ChartPoint chartPoint)
+        {
         }
     }
 }
