@@ -74,7 +74,12 @@ namespace ProjectSuccessWPF
             }
         }
 
-        public void CreateReport(string path, List<TaskInformation> tasks, List<ResourceInformation> resources, ProjectProperties projectProps)
+        public void CreateReport(
+            string path, 
+            List<TaskInformation> tasks, 
+            List<ResourceInformation> resources, 
+            ProjectProperties projectProps, 
+            List<ChartContainer> charts)
         {
             PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(path, FileMode.Create));
             writer.StrictImageSequence = true;
@@ -86,7 +91,7 @@ namespace ProjectSuccessWPF
 
             int projectCost = projectProps.getBaselineCost().intValue();
             int cost = projectCost;
-            float overcost = 0;
+            double overcost = 0;
             int taskCount = 0;
             int remainProjectCost = projectProps.getBaselineCost().intValue() - projectProps.getActualCost().intValue();
             int remainCost = remainProjectCost;
@@ -152,6 +157,22 @@ namespace ProjectSuccessWPF
                         false));
             }
 
+            #endregion
+
+            //Space between parts
+            document.Add(CreateParagraph(Environment.NewLine + "Графики" + Environment.NewLine, headerFontSize, true));
+
+            #region Charts
+            if(charts!= null && charts.Count>0)
+            {
+                foreach(ChartContainer c in charts)
+                {
+                    document.Add(Image.GetInstance(c.Chart, System.Drawing.Imaging.ImageFormat.Jpeg));
+                    document.Add(CreateParagraph(c.Header, textFontSize, true));
+                    if (c.Text != string.Empty)
+                        document.Add(CreateParagraph(Environment.NewLine + c.Text, textFontSize, false));
+                }
+            }
             #endregion
 
             document.Close();

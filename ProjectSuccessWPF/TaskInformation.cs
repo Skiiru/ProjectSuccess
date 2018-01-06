@@ -23,11 +23,12 @@ namespace ProjectSuccessWPF
 
 
         public string OvertimeWork { get; private set; }
+        public double OvertimeWorkDuration { get; private set; }
         public string BaselineDuration { get; private set; }
         public int Cost { get; private set; }
         public int ActualCost { get; private set; }
         public int RemainingCost { get; private set; }
-        public float OverCost { get; private set; }
+        public double OverCost { get; private set; }
         public int CompletePecrentage { get; private set; }
 
         public TaskInformation(Task task, List<Resource> resources)
@@ -55,18 +56,25 @@ namespace ProjectSuccessWPF
                 Duration duration = task.getDuration();
                 this.BaselineDuration = baselineDuration.toString();
                 if (baselineDuration.getUnits() == duration.getUnits())
-                    OvertimeWork = (duration.getDuration() - baselineDuration.getDuration()).ToString() + duration.getUnits().toString();
+                {
+                    OvertimeWorkDuration = duration.getDuration() - baselineDuration.getDuration();
+                    OvertimeWork = OvertimeWorkDuration.ToString() + duration.getUnits().toString();
+                }
                 else
                 {
                     if (baselineDuration.compareTo(duration) > 0)
                         OvertimeWork = "Convertation problems. Plese make sure that all duration parameters have same time units.";
                     else
                         OvertimeWork = "0.0";
+                    OvertimeWorkDuration = 0;
                 }
             }
             else
+            {
                 BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
-            OverCost = task.getCost().floatValue() - task.getBaselineCost().floatValue();
+                OvertimeWorkDuration = 0;
+            }
+            OverCost = task.getCost().doubleValue() - task.getBaselineCost().doubleValue();
             TaskName = task.getName();
             Cost = task.getCost().intValue();
             ActualCost = task.getActualCost().intValue();

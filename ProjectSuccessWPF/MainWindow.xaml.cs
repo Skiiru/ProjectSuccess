@@ -2,9 +2,8 @@
 using LiveCharts.Wpf;
 using Microsoft.Win32;
 using net.sf.mpxj;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,7 +20,7 @@ namespace ProjectSuccessWPF
 
         List<TaskInformation> tasks;
         List<ResourceInformation> resources;
-
+        List<ChartContainer> charts;
         string currencySymbol;
         string resourcesWorktimeSymbol;
         string taskDurationSymbol;
@@ -41,6 +40,7 @@ namespace ProjectSuccessWPF
             InitializeComponent();
             fileWorker = new MSProjectFileWorker();
             builder = new PDFBuilder();
+            charts = new List<ChartContainer>();
             openFileDialog = new OpenFileDialog
             {
                 Filter = "Файлы MSProject|*.mpp"
@@ -50,37 +50,6 @@ namespace ProjectSuccessWPF
             {
                 Filter = "PDF|*.pdf"
             };
-
-            #region Testing
-            fileWorker.ReadFile(@"C:\Users\Skiiru\Documents\Visual Studio 2017\Projects\ProjectSuccess\ProjectSuccessWPF\test2.mpp");
-            projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
-            tasks = projectAnalyzer.GetTasksWithHierarhy();
-            TreeViewItem firstItem = new TreeViewItem
-            {
-                Header = "Текущий проект"
-            };
-            CreateTreeViewItems(tasks, ref firstItem);
-            TasksTreeView.Items.Add(firstItem);
-
-            resources = projectAnalyzer.GetResources();
-
-            builder.CreateReport(@"test.pdf", tasks, resources, projectAnalyzer.GetProjectProperties());
-            #endregion
-
-            hoursPerDay = projectAnalyzer.GetProjectProperties().getMinutesPerDay().doubleValue() / 60;
-            ResourcesDataGrid.ItemsSource = resources;
-            currencySymbol = projectAnalyzer.GetProjectProperties().getCurrencySymbol();
-            string forTaskSymbol = projectAnalyzer.GetProjectProperties().getBaselineDuration().toString();
-            taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
-            string forResourcesSymbol = resources[0].WorkDuration;
-            resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
-
-            //Charts
-            TaskCostChart.Series = CreateTasksCostCostColumnSeries();
-            TasksDurationChart.Series = CreateTasksDurationCostColumnSeries();
-            ResourcesCostPieChart.Series = CreateResourcesCostPieSeries();
-            ResourcesWorktimePieChart.Series = CreateResourcesWortimePieSeries();
-
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -135,25 +104,28 @@ namespace ProjectSuccessWPF
             MessageBox.Show(text, "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        void OpenFile()
+        bool OpenFile()
         {
-            openFileDialog.ShowDialog();
-            if (openFileDialog.FileName != null && openFileDialog.FileName != string.Empty)
-            {
-                mppFilePath = openFileDialog.FileName;
-            }
-            else
-                ShowError("Ошибка при открытии файла.");
-
+            bool result = openFileDialog.ShowDialog() == true ? true : false;
+            if (result)
+                if (openFileDialog.FileName != null && openFileDialog.FileName != string.Empty)
+                {
+                    mppFilePath = openFileDialog.FileName;
+                }
+                else
+                    ShowError("Ошибка при открытии файла.");
+            return result;
         }
 
-        void SaveFile()
+        bool SaveFile()
         {
-            saveFileDialog.ShowDialog();
-            if (saveFileDialog.FileName != null && saveFileDialog.FileName != string.Empty)
-                reportFilePath = saveFileDialog.FileName;
-            else
-                ShowError("Ошибка при сохранении файла.");
+            bool result = saveFileDialog.ShowDialog() == true ? true : false;
+            if (result)
+                if (saveFileDialog.FileName != null && saveFileDialog.FileName != string.Empty)
+                    reportFilePath = saveFileDialog.FileName;
+                else
+                    ShowError("Ошибка при сохранении файла.");
+            return result;
         }
 
         SeriesCollection CreateTasksCostCostColumnSeries()
@@ -224,7 +196,131 @@ namespace ProjectSuccessWPF
             return collection;
         }
 
-        private void TasksChart_DataHover(object sender, ChartPoint chartPoint)
+        SeriesCollection CreateTasksOverworkCostCoulumnSeries()
+        {
+            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < tasks.Count; ++i)
+            {
+                if (tasks[i].OverCost != 0)
+                {
+                    collection.Add(new ColumnSeries
+                    {
+                        Title = tasks[i].TaskName,
+                        Values = new ChartValues<double> { tasks[i].OverCost },
+                    });
+                    TaskChartAxisXLabels[i] = tasks[i].TaskName;
+                }
+            }
+            TasksDurationChart.AxisX[0].Title = "Задачи";
+            TasksDurationChart.AxisY[0].Title = "Перерасход сресдств, " + currencySymbol;
+            return collection;
+        }
+
+        SeriesCollection CreateTasksOverworkDurationCoulumnSeries()
+        {
+            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < tasks.Count; ++i)
+            {
+                if (tasks[i].OvertimeWorkDuration != 0)
+                {
+                    collection.Add(new ColumnSeries
+                    {
+                        Title = tasks[i].TaskName,
+                        Values = new ChartValues<double> { tasks[i].OvertimeWorkDuration },
+                    });
+                    TaskChartAxisXLabels[i] = tasks[i].TaskName;
+                }
+            }
+            TasksDurationChart.AxisX[0].Title = "Задачи";
+            TasksDurationChart.AxisY[0].Title = "Перерасход времени, " + taskDurationSymbol;
+            return collection;
+        }
+
+        SeriesCollection CreateResourceCostPerTimeUnitColumnSeries()
+        {
+            SeriesCollection collection = new SeriesCollection();
+            for (int i = 0; i < resources.Count; ++i)
+            {
+                collection.Add(new ColumnSeries
+                {
+                    Title = resources[i].ResourceName,
+                    Values = new ChartValues<double> { resources[i].CostPerTimeUnit},
+                });
+            }
+            TasksDurationChart.AxisX[0].Title = "Русурсы";
+            TasksDurationChart.AxisY[0].Title = "Затраты за единицу времени / использования, " + currencySymbol;
+            return collection;
+        }
+
+        private void QuitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите выйти?", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+                this.Close();
+        }
+
+        private void HelpMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new HelpWindow().ShowDialog();
+        }
+
+        private void OpenFilMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpenFile())
+            {
+                fileWorker.ReadFile(mppFilePath);
+                projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
+                tasks = projectAnalyzer.GetTasksWithHierarhy();
+                resources = projectAnalyzer.GetResources();
+                TreeViewItem firstItem = new TreeViewItem
+                {
+                    Header = "Текущий проект"
+                };
+
+                //Tree view
+                CreateTreeViewItems(tasks, ref firstItem);
+                TasksTreeView.Items.Add(firstItem);
+
+                //Data grid
+                ResourcesDataGrid.ItemsSource = resources;
+
+                //Symbols
+                hoursPerDay = projectAnalyzer.GetProjectProperties().getMinutesPerDay().doubleValue() / 60;
+                currencySymbol = projectAnalyzer.GetProjectProperties().getCurrencySymbol();
+                string forTaskSymbol = projectAnalyzer.GetProjectProperties().getBaselineDuration().toString();
+                taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
+                string forResourcesSymbol = resources[0].WorkDuration;
+                resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
+
+                //Charts
+                TaskCostChart.Series = CreateTasksCostCostColumnSeries();
+                TaskCostChart.AxisX[0].Labels = TaskChartAxisXLabels;
+                TasksDurationChart.Series = CreateTasksDurationCostColumnSeries();
+                TasksOverworkDurationChart.Series = CreateTasksOverworkDurationCoulumnSeries();
+                TasksOverworkCostChart.Series = CreateTasksOverworkCostCoulumnSeries();
+                ResourcesCostPieChart.Series = CreateResourcesCostPieSeries();
+                ResourcesWorktimePieChart.Series = CreateResourcesWortimePieSeries();
+                ResourcesCostPerUseChart.Series = CreateResourceCostPerTimeUnitColumnSeries();
+
+                //Enable buttons
+                CreateReportMenuItem.IsEnabled = true;
+            }
+        }
+
+        private void CreateReportMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveFile())
+            {
+                charts.Clear();
+                charts = WinFormsChartCreator.GetCharts(projectAnalyzer.GetTasksWithoutHierarhy(), resources);
+                builder.CreateReport(reportFilePath, tasks, resources, projectAnalyzer.GetProjectProperties(), charts);
+                (new ReportSavedWindow(reportFilePath)).ShowDialog();
+            }
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
         }
     }

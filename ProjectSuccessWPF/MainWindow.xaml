@@ -6,23 +6,31 @@
         xmlns:local="clr-namespace:ProjectSuccessWPF"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1050">
+        Title="MainWindow" Height="700" Width="1050" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть файл MSProject" Name="OpenFilMenuItem" Click="OpenFilMenuItem_Click"></MenuItem>
+                <MenuItem Header="Создать очтёт" Name="CreateReportMenuItem" Click="CreateReportMenuItem_Click" IsEnabled="False"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Справка" Name="HelpMenuItem" Click="HelpMenuItem_Click"></MenuItem>
+            <MenuItem Header="Выход" Name="QuitMenuItem" Click="QuitMenuItem_Click"></MenuItem>
+        </Menu>
         <TreeView Name="TasksTreeView" Grid.Column="0" Grid.Row="1" Margin="10" Grid.RowSpan="2">
         </TreeView>
         <Grid Grid.Column="1" Grid.Row="1">
-            <TabControl Margin="10">
-                <TabItem Header="Стоимость задач">
-                    <lvc:CartesianChart Name="TaskCostChart" Grid.Row="2" Margin="10" Hoverable="True" DataHover="TasksChart_DataHover">
+            <TabControl Margin="10" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Стоимость задач" Name="TaskCostChartTab">
+                    <lvc:CartesianChart Name="TaskCostChart" Grid.Row="2" Margin="10" Hoverable="True">
                         <lvc:CartesianChart.DataTooltip>
                             <lvc:DefaultTooltip SelectionMode="OnlySender" />
                         </lvc:CartesianChart.DataTooltip>
@@ -34,7 +42,7 @@
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </TabItem>
-                <TabItem Header="Время выполнения задач">
+                <TabItem Header="Время выполнения задач" Name="TasksDurationChartTab">
                     <lvc:CartesianChart Name="TasksDurationChart" Grid.Row="2" Margin="10" Hoverable="True">
                         <lvc:CartesianChart.DataTooltip>
                             <lvc:DefaultTooltip SelectionMode="OnlySender" />
@@ -47,19 +55,58 @@
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </TabItem>
-                <TabItem Header="Соотношение затрат на ресурсы">
+                <TabItem Header="Перерасход средств на задачу" Name="TasksOverworkCostChartTab">
+                    <lvc:CartesianChart Name="TasksOverworkCostChart" Grid.Row="2" Margin="10" Hoverable="True">
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip SelectionMode="OnlySender" />
+                        </lvc:CartesianChart.DataTooltip>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis ShowLabels="False"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </TabItem>
+                <TabItem Header="Перерасход времени на задачу" Name="TasksVoerworkDurationChartTab">
+                    <lvc:CartesianChart Name="TasksOverworkDurationChart" Grid.Row="2" Margin="10" Hoverable="True">
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip SelectionMode="OnlySender" />
+                        </lvc:CartesianChart.DataTooltip>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis ShowLabels="False"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </TabItem>
+                <TabItem Header="Соотношение затрат на ресурсы" Name="ResourcesCostPieChartTab">
                     <lvc:PieChart Name="ResourcesCostPieChart">
                         <lvc:PieChart.DataTooltip>
                             <lvc:DefaultTooltip SelectionMode="OnlySender"></lvc:DefaultTooltip>
                         </lvc:PieChart.DataTooltip>
                     </lvc:PieChart>
                 </TabItem>
-                <TabItem Header="Загруженность ресурсов">
+                <TabItem Header="Загруженность ресурсов" Name="ResourcesWorktimePieChartTab">
                     <lvc:PieChart Name="ResourcesWorktimePieChart">
                         <lvc:PieChart.DataTooltip>
                             <lvc:DefaultTooltip SelectionMode="OnlySender"></lvc:DefaultTooltip>
                         </lvc:PieChart.DataTooltip>
                     </lvc:PieChart>
+                </TabItem>
+                <TabItem Header="Затраты за ед. использования" Name="ResourcesCostPerUseChartTab">
+                    <lvc:CartesianChart Name="ResourcesCostPerUseChart" Grid.Row="2" Margin="10" Hoverable="True">
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip SelectionMode="OnlySender" />
+                        </lvc:CartesianChart.DataTooltip>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis ShowLabels="False"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
                 </TabItem>
             </TabControl>
         </Grid>
