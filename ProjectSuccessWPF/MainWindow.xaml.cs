@@ -17,6 +17,7 @@ namespace ProjectSuccessWPF
         MSProjectFileWorker fileWorker;
         MSProjectAnalyzer projectAnalyzer;
         PDFBuilder builder;
+        ProjectRate rate;
 
         List<TaskInformation> tasks;
         List<ResourceInformation> resources;
@@ -274,12 +275,15 @@ namespace ProjectSuccessWPF
                 projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
                 tasks = projectAnalyzer.GetTasksWithHierarhy();
                 resources = projectAnalyzer.GetResources();
+
+                rate = new ProjectRate(projectAnalyzer.GetTasksWithoutHierarhy(), resources);
+
+                //Tree view
                 TreeViewItem firstItem = new TreeViewItem
                 {
                     Header = "Текущий проект"
                 };
 
-                //Tree view
                 CreateTreeViewItems(tasks, ref firstItem);
                 TasksTreeView.Items.Add(firstItem);
 
@@ -315,7 +319,7 @@ namespace ProjectSuccessWPF
             {
                 charts.Clear();
                 charts = WinFormsChartCreator.GetCharts(projectAnalyzer.GetTasksWithoutHierarhy(), resources);
-                builder.CreateReport(reportFilePath, tasks, resources, projectAnalyzer.GetProjectProperties(), charts);
+                builder.CreateReport(reportFilePath, tasks, resources, projectAnalyzer.GetProjectProperties(), charts, rate);
                 (new ReportSavedWindow(reportFilePath)).ShowDialog();
             }
         }

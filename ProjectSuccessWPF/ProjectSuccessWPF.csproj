@@ -175,6 +175,7 @@
     </ApplicationDefinition>
     <Compile Include="ChartContainer.cs" />
     <Compile Include="ChartSaver.cs" />
+    <Compile Include="ProjectRate.cs" />
     <Compile Include="ReportSavedWindow.xaml.cs">
       <DependentUpon>ReportSavedWindow.xaml</DependentUpon>
     </Compile>

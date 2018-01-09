@@ -56,7 +56,7 @@ namespace ProjectSuccessWPF
                    currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePecrentage + "%) : " +
                    t.GetDurations() +
                    ", стоимость - " + t.Cost + projectProps.getCurrencySymbol() +
-                   ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() + 
+                   ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() +
                    ", перерасход - " + t.OverCost + projectProps.getCurrencySymbol() +
                    ", ресурсы - ";
                 if (t.Resources.Count != 0)
@@ -75,11 +75,12 @@ namespace ProjectSuccessWPF
         }
 
         public void CreateReport(
-            string path, 
-            List<TaskInformation> tasks, 
-            List<ResourceInformation> resources, 
-            ProjectProperties projectProps, 
-            List<ChartContainer> charts)
+            string path,
+            List<TaskInformation> tasks,
+            List<ResourceInformation> resources,
+            ProjectProperties projectProps,
+            List<ChartContainer> charts,
+            ProjectRate rate)
         {
             PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(path, FileMode.Create));
             writer.StrictImageSequence = true;
@@ -105,8 +106,8 @@ namespace ProjectSuccessWPF
                     remainCost += t.RemainingCost;
             }
 
-            string projectCostStr = 
-                cost + projectProps.getCurrencySymbol() + 
+            string projectCostStr =
+                cost + projectProps.getCurrencySymbol() +
                 " (осталось - " + remainCost + projectProps.getCurrencySymbol() + ") " +
                 "перерасход - " + overcost + projectProps.getCurrencySymbol();
             string projectTime = projectProps.getStartDate().toString() + " - " + projectProps.getFinishDate();
@@ -115,6 +116,16 @@ namespace ProjectSuccessWPF
             document.Add(CreatePhrase("; число ресурсов - " + resources.Count, textFontSize, false));
 
             document.Add(CreatePhrase("; всего задач - " + taskCount + "." + Environment.NewLine, textFontSize, false));
+
+            if (rate != null)
+            {
+                document.Add(CreateParagraph("Оценка проекта", headerFontSize, true));
+                if (!double.IsNaN(rate.TasksOverCostPercentage))
+                {
+                    string s = "Перерасход средств (в %): " + Math.Round(rate.TasksOverCostPercentage, 2) + ", " + rate.GetOvercostRateString() + ".";
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+            }
 
             #region Tasks
             document.Add(CreateParagraph("Список задач", headerFontSize, true));
@@ -163,9 +174,9 @@ namespace ProjectSuccessWPF
             document.Add(CreateParagraph(Environment.NewLine + "Графики" + Environment.NewLine, headerFontSize, true));
 
             #region Charts
-            if(charts!= null && charts.Count>0)
+            if (charts != null && charts.Count > 0)
             {
-                foreach(ChartContainer c in charts)
+                foreach (ChartContainer c in charts)
                 {
                     document.Add(Image.GetInstance(c.Chart, System.Drawing.Imaging.ImageFormat.Jpeg));
                     document.Add(CreateParagraph(c.Header, textFontSize, true));
@@ -176,6 +187,7 @@ namespace ProjectSuccessWPF
             #endregion
 
             document.Close();
+            document.Dispose();
             if (!File.Exists(path))
                 throw new IOException("Something went wrong in file creating. File doesn\'t exists.");
         }
