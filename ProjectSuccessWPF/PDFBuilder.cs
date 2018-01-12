@@ -125,6 +125,12 @@ namespace ProjectSuccessWPF
                     string s = "Перерасход средств (в %): " + Math.Round(rate.TasksOverCostPercentage, 2) + ", " + rate.GetOvercostRateString() + ".";
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
+
+                if(!double.IsNaN(rate.MeanTaskDuration))
+                {
+                    string s = "Среднеяя продолжительность задач (в часах): " + Math.Round(rate.MeanTaskDuration, 2) + ", " + rate.GetMeanTaskDurationString() + '.';
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
             }
 
             #region Tasks

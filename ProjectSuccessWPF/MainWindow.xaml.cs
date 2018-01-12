@@ -2,6 +2,7 @@
 using LiveCharts.Wpf;
 using Microsoft.Win32;
 using net.sf.mpxj;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
@@ -284,6 +285,21 @@ namespace ProjectSuccessWPF
                     Header = "Текущий проект"
                 };
 
+                if (rate != null)
+                {
+                    if (!double.IsNaN(rate.TasksOverCostPercentage))
+                    {
+                        string s = "Перерасход средств (в %): " + Math.Round(rate.TasksOverCostPercentage, 2) + ", " + rate.GetOvercostRateString() + ".";
+                        firstItem.Items.Add(s);
+                    }
+
+                    if (!double.IsNaN(rate.MeanTaskDuration))
+                    {
+                        string s = "Среднеяя продолжительность задач (в часах): " + Math.Round(rate.MeanTaskDuration, 2) + ", " + rate.GetMeanTaskDurationString() + '.';
+                        firstItem.Items.Add(s);
+                    }
+                }
+
                 CreateTreeViewItems(tasks, ref firstItem);
                 TasksTreeView.Items.Add(firstItem);
 
@@ -329,3 +345,7 @@ namespace ProjectSuccessWPF
         }
     }
 }
+
+
+
+

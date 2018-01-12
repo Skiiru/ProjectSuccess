@@ -13,17 +13,21 @@ namespace ProjectSuccessWPF
         /// </summary>
         public double TasksOverCostPercentage { get; private set; }
 
+        public double MeanTaskDuration { get; private set; }
+
         public ProjectRate(List<TaskInformation> tasksWithoutHierarhy, List<ResourceInformation> recources)
         {
             double projectCost = 0;
             double projectOverCost = 0;
+            double duration = 0;
 
             foreach (TaskInformation t in tasksWithoutHierarhy)
             {
                 projectCost += t.Cost;
                 projectOverCost += t.OverCost;
+                duration += t.DurationValue;
             }
-
+            MeanTaskDuration = duration / tasksWithoutHierarhy.Count;
             TasksOverCostPercentage = projectOverCost / projectCost * 100;
         }
 
@@ -44,11 +48,27 @@ namespace ProjectSuccessWPF
                     result = "отличное качество планирования, перерасход минимален";
                 else if (TasksOverCostPercentage <= 30)
                     result = "хорошее качество планирования, перерасход есть, но не слишком велик";
-                else if (TasksOverCostPercentage <= 60)
+                else if (TasksOverCostPercentage <= 50)
                     result = "нормальное качество планирования, прерасход есть, его объем как и в большинствен реальных проектов";
                 else
                     result = "плохое качество планирования, перерасход вышел за пределы максимально допустимого";
             }
+            return result;
+        }
+
+        public string GetMeanTaskDurationString()
+        {
+            string result = Environment.NewLine;
+            if (MeanTaskDuration < 0)
+                throw new ArgumentOutOfRangeException("MeanTaskduration", "Argument is less then zero.");
+            else if (MeanTaskDuration <= 2)
+                result = "плохое качество планирования, задачи слишком сильно раздроблены";
+            else if (MeanTaskDuration <= 8)
+                result = "хорошее качество планирования";
+            else if (MeanTaskDuration <= 16)
+                result = "нормальное качество планирования";
+            else
+                result = "плохое качество планирования, задачи необходим разделить на подзадачи";
             return result;
         }
     }

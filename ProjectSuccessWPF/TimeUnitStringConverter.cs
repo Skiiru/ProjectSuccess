@@ -19,7 +19,8 @@ namespace ProjectSuccessWPF
             char type = timeStr.Trim()[timeStr.Length - 1];
             double result = 0;
             result = Convert.ToDouble(toConvert);
-            return result;
+            //Should set hours per day
+            return type == HOURS_CHAR ? result : result * 8;
         }
     }
 }
