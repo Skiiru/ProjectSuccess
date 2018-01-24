@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using net.sf.mpxj;
+﻿using net.sf.mpxj;
 using net.sf.mpxj.mpp;
 using net.sf.mpxj.reader;
 using System.IO;

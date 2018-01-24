@@ -23,8 +23,9 @@ namespace ProjectSuccessWPF
 
 
         public string OvertimeWork { get; private set; }
-        public double OvertimeWorkDuration { get; private set; }
+        public double OvertimeWorkValue { get; private set; }
         public string BaselineDuration { get; private set; }
+        public double BaselineDurationValue { get; private set; }
         public int Cost { get; private set; }
         public int ActualCost { get; private set; }
         public int RemainingCost { get; private set; }
@@ -34,7 +35,7 @@ namespace ProjectSuccessWPF
         public TaskInformation(Task task, List<Resource> resources)
         {
             this.task = task;
-            this.Resources = resources;
+            Resources = resources;
             ChildTasks = new List<TaskInformation>();
 
             //Dates
@@ -54,11 +55,15 @@ namespace ProjectSuccessWPF
             if (baselineDuration != null)
             {
                 Duration duration = task.getDuration();
-                this.BaselineDuration = baselineDuration.toString();
+                BaselineDuration = baselineDuration.toString();
+                BaselineDurationValue = TimeUnitStringConverter.ConvertTime(BaselineDuration);
                 if (baselineDuration.getUnits() == duration.getUnits())
                 {
-                    OvertimeWorkDuration = duration.getDuration() - baselineDuration.getDuration();
-                    OvertimeWork = OvertimeWorkDuration.ToString() + duration.getUnits().toString();
+                    if (duration.getUnits().ToString() == "h")
+                        OvertimeWorkValue = duration.getDuration() - baselineDuration.getDuration();
+                    else
+                        OvertimeWorkValue = (duration.getDuration() - baselineDuration.getDuration()) * 8;
+                    OvertimeWork = OvertimeWorkValue.ToString() + 'h';
                 }
                 else
                 {
@@ -66,13 +71,13 @@ namespace ProjectSuccessWPF
                         OvertimeWork = "Convertation problems. Plese make sure that all duration parameters have same time units.";
                     else
                         OvertimeWork = "0.0";
-                    OvertimeWorkDuration = 0;
+                    OvertimeWorkValue = 0;
                 }
             }
             else
             {
                 BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
-                OvertimeWorkDuration = 0;
+                OvertimeWorkValue = 0;
             }
             OverCost = task.getCost().doubleValue() - task.getBaselineCost().doubleValue();
             TaskName = task.getName();

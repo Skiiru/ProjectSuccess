@@ -52,24 +52,26 @@ namespace ProjectSuccessWPF
             {
                 level++;
                 string currentLevelString = levelStr + "." + level.ToString();
-                string paragraphText =
-                   currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePecrentage + "%) : " +
-                   t.GetDurations() +
-                   ", стоимость - " + t.Cost + projectProps.getCurrencySymbol() +
-                   ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() +
-                   ", перерасход - " + t.OverCost + projectProps.getCurrencySymbol() +
-                   ", ресурсы - ";
-                if (t.Resources.Count != 0)
+                if (t.OvertimeWorkValue != 0)
                 {
-                    foreach (Resource res in t.Resources)
-                        paragraphText += res.getName() + ", ";
-                    //Replasing "," with "." after last item
-                    paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
+                    string paragraphText =
+                       currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePecrentage + "%) : " +
+                       t.GetDurations() +
+                       ", стоимость - " + t.Cost + projectProps.getCurrencySymbol() +
+                       ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() +
+                       ", перерасход - " + t.OverCost + projectProps.getCurrencySymbol() +
+                       ", ресурсы - ";
+                    if (t.Resources.Count != 0)
+                    {
+                        foreach (Resource res in t.Resources)
+                            paragraphText += res.getName() + ", ";
+                        //Replasing "," with "." after last item
+                        paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
+                    }
+                    else
+                        paragraphText += " не указаны.";
+                    document.Add(CreateParagraph(paragraphText, textFontSize, false));
                 }
-                else
-                    paragraphText += "указаны в подзадачах либо отсутствуют.";
-
-                document.Add(CreateParagraph(paragraphText, textFontSize, false));
                 ParseTaskHierarhyIntoText(t.ChildTasks, currentLevelString, projectProps);
             }
         }
@@ -119,42 +121,75 @@ namespace ProjectSuccessWPF
 
             if (rate != null)
             {
-                document.Add(CreateParagraph("Оценка проекта", headerFontSize, true));
-                if (!double.IsNaN(rate.TasksOverCostPercentage))
+                document.Add(CreateParagraph("Оценки проекта", headerFontSize, true));
+
+                if (!double.IsNaN(rate.ProjectOvertime))
                 {
-                    string s = "Перерасход средств (в %): " + Math.Round(rate.TasksOverCostPercentage, 2) + ", " + rate.GetOvercostRateString() + ".";
+                    string s = "Перерасход времени: " + Math.Round(rate.ProjectOvertime, 2) + "ч.";
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
 
-                if(!double.IsNaN(rate.MeanTaskDuration))
+                if (!double.IsNaN(rate.TasksOverCost))
                 {
-                    string s = "Среднеяя продолжительность задач (в часах): " + Math.Round(rate.MeanTaskDuration, 2) + ", " + rate.GetMeanTaskDurationString() + '.';
+                    string s = "Перерасход срдеств: " + Math.Round(rate.TasksOverCost, 2) + projectProps.getCurrencySymbol() + ".";
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+
+                if (!double.IsNaN(rate.MeanTaskDuration))
+                {
+                    string s = "Средняя продолжительность задач: " + Math.Round(rate.MeanTaskDuration, 2) + "ч.";
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+
+                if (!double.IsNaN(rate.RecourcesTotalOverworkTime))
+                {
+                    string s = "Суммарный перерасход времени ресурсов: " + Math.Round(rate.RecourcesTotalOverworkTime, 2) + "ч.";
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+
+                if (!double.IsNaN(rate.TasksOverCostPercentage))
+                {
+                    string s = "Оценка перерасхода средств: " + Math.Round(rate.TasksOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+
+                if(!double.IsNaN(rate.MeanTaskDurationRate))
+                {
+                    string s = "Оценка средней продолжительности задач: " + Math.Round(rate.MeanTaskDurationRate, 2) + "%, " + rate.GetMeanTaskDurationString() + '.';
+                    document.Add(CreateParagraph(s, textFontSize, false));
+                }
+
+                if (!double.IsNaN(rate.MeanTaskDurationRate))
+                {
+                    string s = "Оценка перерасхода времени: " + Math.Round(rate.ProjectOvertimeRate, 2) + "%, " + rate.GetProjectOvertimeString() + '.';
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
             }
 
             #region Tasks
-            document.Add(CreateParagraph("Список задач", headerFontSize, true));
+            document.Add(CreateParagraph("Список задач с отклонениями", headerFontSize, true));
 
             int level = 0;
             foreach (TaskInformation t in tasks)
             {
                 level++;
-                string paragraphText = level.ToString() + ". \"" + t.TaskName + "\": " + t.GetDurations();
-                if (t.OvertimeWork != "0.0")
-                    paragraphText += ", переработка - " + t.OvertimeWork;
-                paragraphText += ", ресурсы - ";
-                if (t.Resources.Count != 0)
+                if (t.OvertimeWorkValue != 0)
                 {
-                    foreach (Resource res in t.Resources)
-                        paragraphText += res.getName() + ", ";
-                    //Replasing "," with "." after last item
-                    paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
+                    string paragraphText = level.ToString() + ". \"" + t.TaskName + "\": " + t.GetDurations();
+                    if (t.OvertimeWork != "0.0")
+                        paragraphText += ", переработка - " + t.OvertimeWork;
+                    paragraphText += ", ресурсы - ";
+                    if (t.Resources.Count != 0)
+                    {
+                        foreach (Resource res in t.Resources)
+                            paragraphText += res.getName() + ", ";
+                        //Replasing "," with "." after last item
+                        paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
+                    }
+                    else
+                        paragraphText += "не указаны.";
+                    document.Add(CreateParagraph(paragraphText, textFontSize, false));
                 }
-                else
-                    paragraphText += "указаны в подзадачах либо отсутствуют.";
-
-                document.Add(CreateParagraph(paragraphText, textFontSize, false));
                 ParseTaskHierarhyIntoText(t.ChildTasks, level.ToString(), projectProps);
             }
             #endregion
@@ -163,11 +198,11 @@ namespace ProjectSuccessWPF
             document.Add(CreateParagraph(Environment.NewLine, textFontSize, false));
 
             #region Resources
-            document.Add(CreateParagraph("Список ресурсов", headerFontSize, true));
+            document.Add(CreateParagraph("Список ресурсов с отклонениями", headerFontSize, true));
             foreach (ResourceInformation resInf in resources)
             {
                 //Sometimes there is "fake" resource in project, idk why
-                if (resInf.ResourceName != "Undefined")
+                if (resInf.ResourceName != "Undefined" && resInf.OvertimeWorkDurationValue != 0)
                     document.Add(CreateParagraph(
                         resInf.ResourceName + " (" + resInf.Cost + "): время работы - " + resInf.WorkDuration + ", переработки - " + resInf.OvertimeWorkDuration,
                         textFontSize,

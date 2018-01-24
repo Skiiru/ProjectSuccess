@@ -69,10 +69,10 @@ namespace ProjectSuccessWPF
                 taskDurationChartAxisX.Add(t.TaskName);
                 tasksDurationChartAxisY.Add(t.DurationValue);
 
-                if (t.OvertimeWorkDuration != 0)
+                if (t.OvertimeWorkValue != 0)
                 {
                     taskOverworkDurationChartAxisX.Add(t.TaskName);
-                    tasksOverworkDurationChartAxisY.Add(t.OvertimeWorkDuration);
+                    tasksOverworkDurationChartAxisY.Add(t.OvertimeWorkValue);
                 }
             }
             tasksCostChart.Series[0].Points.DataBindXY(taskCostChartAxisX, tasksCostChartAxisY);

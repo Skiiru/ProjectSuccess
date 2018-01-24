@@ -11,12 +11,13 @@ namespace ProjectSuccessWPF
         List<Task> tasks;
         public string ResourceName { get; private set; }
         public string GroupName { get; private set; }
-        public float CostPerTimeUnit { get; private set; }
-        public float Cost { get; private set; }
+        public double CostPerTimeUnit { get; private set; }
+        public double Cost { get; private set; }
         public string WorkDuration { get; private set; }
         public double WorkDurationValue { get; private set; }
         public string OvertimeWorkDuration { get; private set; }
-        public float OvertimeWorkCost { get; private set; }
+        public double OvertimeWorkDurationValue { get; private set; }
+        public double OvertimeWorkCost { get; private set; }
 
 
         public ResourceInformation(Resource resource, List<Task> tasks)
@@ -34,16 +35,14 @@ namespace ProjectSuccessWPF
             if (baselineWork != null)
             {
                 double duration = 0;
-                foreach (Task t in tasks)
-                {
-                    //Sometimes there is a null task
-                    if (t != null)
-                    {
-                        duration += t.getWork().getDuration();
-                    }
-                }
-                OvertimeWorkDuration = (duration - baselineWork.getDuration()).ToString() + baselineWork.getUnits().toString();
-                OvertimeWorkCost = float.Parse(OvertimeWorkDuration.Remove(OvertimeWorkDuration.Length - 1)) * CostPerTimeUnit;
+                if (resource.getType().toString() == "Work")
+                    foreach (Task t in tasks)
+                        //Sometimes there is a null task
+                        if (t != null && t.getBaselineDuration() != null)
+                            duration += t.getDuration().getDuration() - t.getBaselineDuration().getDuration();
+                OvertimeWorkDurationValue = duration * 8;
+                OvertimeWorkDuration = OvertimeWorkDurationValue + baselineWork.getUnits().toString();
+                OvertimeWorkCost = OvertimeWorkDurationValue * CostPerTimeUnit;
             }
             else
                 OvertimeWorkDuration = "Undefined";

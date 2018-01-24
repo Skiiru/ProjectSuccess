@@ -225,12 +225,12 @@ namespace ProjectSuccessWPF
             SeriesCollection collection = new SeriesCollection();
             for (int i = 0; i < tasks.Count; ++i)
             {
-                if (tasks[i].OvertimeWorkDuration != 0)
+                if (tasks[i].OvertimeWorkValue != 0)
                 {
                     collection.Add(new ColumnSeries
                     {
                         Title = tasks[i].TaskName,
-                        Values = new ChartValues<double> { tasks[i].OvertimeWorkDuration },
+                        Values = new ChartValues<double> { tasks[i].OvertimeWorkValue },
                     });
                     TaskChartAxisXLabels[i] = tasks[i].TaskName;
                 }
@@ -280,6 +280,7 @@ namespace ProjectSuccessWPF
                 rate = new ProjectRate(projectAnalyzer.GetTasksWithoutHierarhy(), resources);
 
                 //Tree view
+                TasksTreeView.Items.Clear();
                 TreeViewItem firstItem = new TreeViewItem
                 {
                     Header = "Текущий проект"
@@ -289,13 +290,25 @@ namespace ProjectSuccessWPF
                 {
                     if (!double.IsNaN(rate.TasksOverCostPercentage))
                     {
-                        string s = "Перерасход средств (в %): " + Math.Round(rate.TasksOverCostPercentage, 2) + ", " + rate.GetOvercostRateString() + ".";
+                        string s = "Оценка перерасхода средств: " + Math.Round(rate.TasksOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
                         firstItem.Items.Add(s);
                     }
 
-                    if (!double.IsNaN(rate.MeanTaskDuration))
+                    if (!double.IsNaN(rate.MeanTaskDurationRate))
                     {
-                        string s = "Среднеяя продолжительность задач (в часах): " + Math.Round(rate.MeanTaskDuration, 2) + ", " + rate.GetMeanTaskDurationString() + '.';
+                        string s = "Оценка средней продолжительность задач: " + Math.Round(rate.MeanTaskDurationRate, 2) + "%, " + rate.GetMeanTaskDurationString() + '.';
+                        firstItem.Items.Add(s);
+                    }
+
+                    if(!double.IsNaN(rate.ProjectOvertimeRate))
+                    {
+                        string s = "Оценка перерасхода времени: " + Math.Round(rate.ProjectOvertimeRate, 2) + "%, " + rate.GetProjectOvertimeString() + '.';
+                        firstItem.Items.Add(s);
+                    }
+
+                    if (!double.IsNaN(rate.RecourcesTotalOverworkTime))
+                    {
+                        string s = "Общее время переработки ресурсов: " + Math.Round(rate.RecourcesTotalOverworkTime, 2) + "ч.";
                         firstItem.Items.Add(s);
                     }
                 }
