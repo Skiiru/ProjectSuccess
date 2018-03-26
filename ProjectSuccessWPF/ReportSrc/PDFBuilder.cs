@@ -55,7 +55,7 @@ namespace ProjectSuccessWPF
                 if (t.OvertimeWorkValue != 0)
                 {
                     string paragraphText =
-                       currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePecrentage + "%) : " +
+                       currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePercentage + "%) : " +
                        t.GetDurations() +
                        ", стоимость - " + t.Cost + projectProps.getCurrencySymbol() +
                        ", оставшаяся стоимость - " + t.RemainingCost + projectProps.getCurrencySymbol() +
@@ -63,8 +63,8 @@ namespace ProjectSuccessWPF
                        ", ресурсы - ";
                     if (t.Resources.Count != 0)
                     {
-                        foreach (Resource res in t.Resources)
-                            paragraphText += res.getName() + ", ";
+                        foreach (ResourceInformation res in t.Resources)
+                            paragraphText += res.ResourceName + ", ";
                         //Replasing "," with "." after last item
                         paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
                     }
@@ -129,9 +129,9 @@ namespace ProjectSuccessWPF
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
 
-                if (!double.IsNaN(rate.TasksOverCost))
+                if (!double.IsNaN(rate.ProjectOverCost))
                 {
-                    string s = "Перерасход срдеств: " + Math.Round(rate.TasksOverCost, 2) + projectProps.getCurrencySymbol() + ".";
+                    string s = "Перерасход срдеств: " + Math.Round(rate.ProjectOverCost, 2) + projectProps.getCurrencySymbol() + ".";
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
 
@@ -147,9 +147,9 @@ namespace ProjectSuccessWPF
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
 
-                if (!double.IsNaN(rate.TasksOverCostPercentage))
+                if (!double.IsNaN(rate.ProjectOverCostPercentage))
                 {
-                    string s = "Оценка перерасхода средств: " + Math.Round(rate.TasksOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
+                    string s = "Оценка перерасхода средств: " + Math.Round(rate.ProjectOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
                     document.Add(CreateParagraph(s, textFontSize, false));
                 }
 
@@ -181,8 +181,8 @@ namespace ProjectSuccessWPF
                     paragraphText += ", ресурсы - ";
                     if (t.Resources.Count != 0)
                     {
-                        foreach (Resource res in t.Resources)
-                            paragraphText += res.getName() + ", ";
+                        foreach (ResourceInformation res in t.Resources)
+                            paragraphText += res.ResourceName + ", ";
                         //Replasing "," with "." after last item
                         paragraphText = paragraphText.Remove(paragraphText.Length - 2, 2) + ".";
                     }

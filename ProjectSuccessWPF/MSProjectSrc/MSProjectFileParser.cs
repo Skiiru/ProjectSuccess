@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
 {
-    class MSProjectAnalyzer
+    class MSProjectFileParser
     {
         ProjectFile project;
 
-        public MSProjectAnalyzer(ProjectFile project)
+        public MSProjectFileParser(ProjectFile project)
         {
             this.project = project;
         }

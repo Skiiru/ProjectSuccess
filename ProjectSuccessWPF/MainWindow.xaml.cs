@@ -16,7 +16,7 @@ namespace ProjectSuccessWPF
     public partial class MainWindow : Window
     {
         MSProjectFileWorker fileWorker;
-        MSProjectAnalyzer projectAnalyzer;
+        MSProjectFileParser projectAnalyzer;
         PDFBuilder builder;
         ProjectRate rate;
 
@@ -34,9 +34,6 @@ namespace ProjectSuccessWPF
         string reportFilePath;
         SaveFileDialog saveFileDialog;
 
-        //Charts
-        public string[] TaskChartAxisXLabels { get; private set; }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -52,6 +49,9 @@ namespace ProjectSuccessWPF
             {
                 Filter = "PDF|*.pdf"
             };
+
+            RedmineWorker redmine = new RedmineWorker();
+            redmine.LoadProjects();
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -61,7 +61,7 @@ namespace ProjectSuccessWPF
                 TreeViewItem treeViewItem = new TreeViewItem
                 {
                     IsExpanded = true,
-                    Header = "Задача \"" + taskInformation.TaskName + "\" (" + taskInformation.CompletePecrentage + "%)"
+                    Header = "Задача \"" + taskInformation.TaskName + "\" (" + taskInformation.CompletePercentage + "%)"
                 };
                 treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.BaselineDuration);
                 if (!taskInformation.Duration.StartsWith("0.0"))
@@ -69,9 +69,9 @@ namespace ProjectSuccessWPF
                 if (taskInformation.OvertimeWork != "0.0")
                     treeViewItem.Items.Add("Переработка: " + taskInformation.OvertimeWork);
                 if (taskInformation.Cost != 0)
-                    treeViewItem.Items.Add("Стоимость: " + taskInformation.Cost);
+                    treeViewItem.Items.Add("Стоимость: " + taskInformation.Cost + currencySymbol);
                 if (taskInformation.OverCost != 0.0)
-                    treeViewItem.Items.Add("Перерасход: " + taskInformation.OverCost);
+                    treeViewItem.Items.Add("Перерасход: " + taskInformation.OverCost + currencySymbol);
                 TreeViewItem resourcesItem = new TreeViewItem
                 {
                     IsExpanded = true
@@ -79,9 +79,9 @@ namespace ProjectSuccessWPF
                 if (taskInformation.Resources.Count != 0)
                 {
                     resourcesItem.Header = "Ресурсы";
-                    foreach (Resource resource in taskInformation.Resources)
+                    foreach (ResourceInformation resource in taskInformation.Resources)
                     {
-                        resourcesItem.Items.Add(resource.getName());
+                        resourcesItem.Items.Add(resource.ResourceName);
 
                     }
                     treeViewItem.Items.Add(resourcesItem);
@@ -133,7 +133,6 @@ namespace ProjectSuccessWPF
         SeriesCollection CreateTasksCostCostColumnSeries()
         {
             List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
-            TaskChartAxisXLabels = new string[tasks.Count];
             SeriesCollection collection = new SeriesCollection();
             for (int i = 0; i < tasks.Count; ++i)
             {
@@ -142,11 +141,9 @@ namespace ProjectSuccessWPF
                     Title = tasks[i].TaskName,
                     Values = new ChartValues<double> { tasks[i].Cost },
                 });
-                TaskChartAxisXLabels[i] = tasks[i].TaskName;
             }
             TaskCostChart.AxisX[0].Title = "Задачи";
             TaskCostChart.AxisY[0].Title = "Цена, " + currencySymbol;
-            TaskCostChart.AxisX[0].Labels = TaskChartAxisXLabels;
             return collection;
         }
 
@@ -161,7 +158,6 @@ namespace ProjectSuccessWPF
                     Title = tasks[i].TaskName,
                     Values = new ChartValues<double> { tasks[i].DurationValue },
                 });
-                TaskChartAxisXLabels[i] = tasks[i].TaskName;
             }
             TasksDurationChart.AxisX[0].Title = "Задачи";
             TasksDurationChart.AxisY[0].Title = "Продолжительность, " + taskDurationSymbol;
@@ -211,7 +207,6 @@ namespace ProjectSuccessWPF
                         Title = tasks[i].TaskName,
                         Values = new ChartValues<double> { tasks[i].OverCost },
                     });
-                    TaskChartAxisXLabels[i] = tasks[i].TaskName;
                 }
             }
             TasksDurationChart.AxisX[0].Title = "Задачи";
@@ -232,7 +227,6 @@ namespace ProjectSuccessWPF
                         Title = tasks[i].TaskName,
                         Values = new ChartValues<double> { tasks[i].OvertimeWorkValue },
                     });
-                    TaskChartAxisXLabels[i] = tasks[i].TaskName;
                 }
             }
             TasksDurationChart.AxisX[0].Title = "Задачи";
@@ -251,7 +245,7 @@ namespace ProjectSuccessWPF
                     Values = new ChartValues<double> { resources[i].CostPerTimeUnit},
                 });
             }
-            TasksDurationChart.AxisX[0].Title = "Русурсы";
+            TasksDurationChart.AxisX[0].Title = "Ресурсы";
             TasksDurationChart.AxisY[0].Title = "Затраты за единицу времени / использования, " + currencySymbol;
             return collection;
         }
@@ -273,7 +267,7 @@ namespace ProjectSuccessWPF
             if (OpenFile())
             {
                 fileWorker.ReadFile(mppFilePath);
-                projectAnalyzer = new MSProjectAnalyzer(fileWorker.projectFile);
+                projectAnalyzer = new MSProjectFileParser(fileWorker.ProjectFile);
                 tasks = projectAnalyzer.GetTasksWithHierarhy();
                 resources = projectAnalyzer.GetResources();
 
@@ -288,9 +282,9 @@ namespace ProjectSuccessWPF
 
                 if (rate != null)
                 {
-                    if (!double.IsNaN(rate.TasksOverCostPercentage))
+                    if (!double.IsNaN(rate.ProjectOverCostPercentage))
                     {
-                        string s = "Оценка перерасхода средств: " + Math.Round(rate.TasksOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
+                        string s = "Оценка перерасхода средств: " + Math.Round(rate.ProjectOverCostPercentage, 2) + "%, " + rate.GetOvercostRateString() + ".";
                         firstItem.Items.Add(s);
                     }
 
@@ -329,7 +323,6 @@ namespace ProjectSuccessWPF
 
                 //Charts
                 TaskCostChart.Series = CreateTasksCostCostColumnSeries();
-                TaskCostChart.AxisX[0].Labels = TaskChartAxisXLabels;
                 TasksDurationChart.Series = CreateTasksDurationCostColumnSeries();
                 TasksOverworkDurationChart.Series = CreateTasksOverworkDurationCoulumnSeries();
                 TasksOverworkCostChart.Series = CreateTasksOverworkCostCoulumnSeries();

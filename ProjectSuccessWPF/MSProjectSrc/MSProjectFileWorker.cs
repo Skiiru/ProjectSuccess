@@ -7,8 +7,8 @@ namespace ProjectSuccessWPF
 {
     class MSProjectFileWorker
     {
-        public ProjectReader projectReader;
-        public ProjectFile projectFile;
+        ProjectReader projectReader;
+        public ProjectFile ProjectFile { get; private set; }
 
         public MSProjectFileWorker()
         {
@@ -19,7 +19,7 @@ namespace ProjectSuccessWPF
         {
             if (!File.Exists(Path))
                 throw new IOException("File doesn/'t exist!");
-            projectFile = projectReader.read(Path);
+            ProjectFile = projectReader.read(Path);
         }
     }
 }

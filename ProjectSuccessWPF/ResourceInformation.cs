@@ -1,4 +1,5 @@
 ﻿using net.sf.mpxj;
+using Redmine.Net.Api.Types;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace ProjectSuccessWPF
     {
         Resource resource;
         List<Task> tasks;
+        int ID;
         public string ResourceName { get; private set; }
         public string GroupName { get; private set; }
         public double CostPerTimeUnit { get; private set; }
@@ -23,6 +25,7 @@ namespace ProjectSuccessWPF
         public ResourceInformation(Resource resource, List<Task> tasks)
         {
             this.resource = resource;
+            ID = resource.getID().intValue();
             ResourceName = resource.getName() ?? "Undefined";
             this.tasks = tasks ?? new List<Task>();
             Cost = resource.getCost().floatValue();
@@ -50,5 +53,11 @@ namespace ProjectSuccessWPF
 
         public ResourceInformation(Resource resource) : this(resource, new List<Task>())
         { }
+
+        public ResourceInformation(Project project, User user)
+        {
+            ResourceName = user.FirstName + " " + user.LastName;
+            ID = user.Id;
+        }
     }
 }

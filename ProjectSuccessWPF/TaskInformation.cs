@@ -1,4 +1,5 @@
 ﻿using net.sf.mpxj;
+using Redmine.Net.Api.Types;
 using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
@@ -6,12 +7,14 @@ namespace ProjectSuccessWPF
     class TaskInformation
     {
         Task task;
-        public List<Resource> Resources { get; private set; }
         public List<TaskInformation> ChildTasks { get; private set; }
 
         static string ERRMSG_ISNOT_IN_BASELINE = "Этой задачи нет в базовом плане.";
 
         public string TaskName { get; private set; }
+        int ID;
+
+        public List<ResourceInformation> Resources { get; private set; }
 
         //Dates
         public string StartDate { get; private set; }
@@ -30,12 +33,14 @@ namespace ProjectSuccessWPF
         public int ActualCost { get; private set; }
         public int RemainingCost { get; private set; }
         public double OverCost { get; private set; }
-        public int CompletePecrentage { get; private set; }
+        public int CompletePercentage { get; private set; }
 
         public TaskInformation(Task task, List<Resource> resources)
         {
+            Resources = new List<ResourceInformation>();
             this.task = task;
-            Resources = resources;
+            foreach (Resource res in resources)
+                this.Resources.Add(new ResourceInformation(res));
             ChildTasks = new List<TaskInformation>();
 
             //Dates
@@ -86,7 +91,37 @@ namespace ProjectSuccessWPF
             RemainingCost = task.getRemainingCost().intValue();
             Duration = task.getDuration().toString();
             DurationValue = TimeUnitStringConverter.ConvertTime(Duration);
-            CompletePecrentage = task.getPercentageComplete().intValue();
+            CompletePercentage = task.getPercentageComplete().intValue();
+        }
+
+        public TaskInformation(Issue issue)
+        {
+            TaskName = issue.Subject;
+            ID = issue.Id;
+
+            BaselineDurationValue = issue.EstimatedHours.Value;
+            BaselineDuration = BaselineDurationValue + "h";
+
+            DurationValue = issue.SpentHours.Value;
+            Duration = DurationValue.ToString() + "h";
+
+            OvertimeWorkValue = (issue.SpentHours - issue.EstimatedHours).Value;
+            OvertimeWork = OvertimeWorkValue.ToString() + "h";
+
+            CompletePercentage = int.Parse(issue.DoneRatio.Value.ToString());
+            StartDate = issue.StartDate == null ? issue.StartDate.ToString() : "Unknown";
+            FinishDate = issue.DueDate == null ? issue.DueDate.ToString() : "Unknown";
+
+            ChildTasks = new List<TaskInformation>();
+            foreach(IssueChild child in issue.Children)
+            {
+                
+            }
+
+            foreach(Redmine.Net.Api.Types.CustomField cfield in issue.CustomFields)
+            {
+
+            }
         }
 
         //Don't working when retun type is Task
@@ -101,7 +136,7 @@ namespace ProjectSuccessWPF
 
         public override string ToString()
         {
-            string result = TaskName + "(" + CompletePecrentage + "): D - " + Duration + ", OD - " + OvertimeWork + ", OC - " + OverCost;
+            string result = TaskName + "(" + CompletePercentage + "): D - " + Duration + ", OD - " + OvertimeWork + ", OC - " + OverCost;
             return base.ToString();
         }
 

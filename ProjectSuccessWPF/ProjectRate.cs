@@ -11,9 +11,9 @@ namespace ProjectSuccessWPF
         /// <summary>
         /// Normal value less then 130%, can be from 0% to +inf, overcost is too much
         /// </summary>
-        public double TasksOverCostPercentage { get; private set; }
+        public double ProjectOverCostPercentage { get; private set; }
 
-        public double TasksOverCost { get; private set; }
+        public double ProjectOverCost { get; private set; }
 
         public double MeanTaskDurationRate { get; private set; }
 
@@ -51,8 +51,8 @@ namespace ProjectSuccessWPF
             RecourcesTotalOverworkTime = recOvertime;
             MeanTaskDuration = duration / tasksWithoutHierarhy.Count;
             MeanTaskDurationRate = 100 * MeanTaskDuration / MAX_TASK_DURATION;
-            TasksOverCost = projectOverCost;
-            TasksOverCostPercentage = (projectOverCost / projectCost) * 100;
+            ProjectOverCost = projectOverCost;
+            ProjectOverCostPercentage = (projectOverCost / projectCost) * 100;
             ProjectOvertime = overtime;
             ProjectOvertimeRate = (overtime / baselineDuration) * 100;
         }
@@ -64,17 +64,17 @@ namespace ProjectSuccessWPF
         public string GetOvercostRateString()
         {
             string result = string.Empty;
-            if (!double.IsNaN(TasksOverCostPercentage))
+            if (!double.IsNaN(ProjectOverCostPercentage))
             {
-                if (TasksOverCostPercentage <= -10)
+                if (ProjectOverCostPercentage <= -10)
                     result = "нормальное качество планирования, но большая часть бюджета не был освоена";
-                else if (TasksOverCostPercentage <= 0)
+                else if (ProjectOverCostPercentage <= 0)
                     result = "хорошее качество планирования, перерасхрод отсутствует";
-                else if (TasksOverCostPercentage <= 10)
+                else if (ProjectOverCostPercentage <= 10)
                     result = "отличное качество планирования, перерасход минимален";
-                else if (TasksOverCostPercentage <= 30)
+                else if (ProjectOverCostPercentage <= 30)
                     result = "хорошее качество планирования, перерасход есть, но не слишком велик";
-                else if (TasksOverCostPercentage <= 50)
+                else if (ProjectOverCostPercentage <= 50)
                     result = "нормальное качество планирования, прерасход есть, его объем как и в большинствен реальных проектов";
                 else
                     result = "плохое качество планирования, перерасход вышел за пределы максимально допустимого";

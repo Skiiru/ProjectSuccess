@@ -36,98 +36,98 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="commons-collections4-4.1, Version=7.0.3.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-common.7.0.3\lib\commons-collections4-4.1.dll</HintPath>
+    <Reference Include="commons-collections4-4.1, Version=7.4.0.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj-common.7.4.0\lib\commons-collections4-4.1.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.AWT.WinForms.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.AWT.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Beans, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Beans.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Charsets, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Corba, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Corba.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Core, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Core.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Localedata, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Management, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Management.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Media, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Media.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Misc, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Misc.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Naming, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Naming.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Remoting, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Security, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Security.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Text, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Text.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Tools, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Tools.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Util, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.Util.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.API, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Reflection, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.Reflection.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.Runtime.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime.JNI, Version=8.0.5449.1, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-ikvm.7.0.3\lib\IKVM.Runtime.JNI.dll</HintPath>
+      <HintPath>..\packages\net.sf.mpxj-ikvm.7.4.0\lib\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -135,20 +135,23 @@
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="mpxj, Version=7.0.3.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj.7.0.3\lib\mpxj.dll</HintPath>
+    <Reference Include="mpxj, Version=7.4.0.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj.7.4.0\lib\mpxj.dll</HintPath>
     </Reference>
-    <Reference Include="MpxjUtilities, Version=7.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-common.7.0.3\lib\MpxjUtilities.dll</HintPath>
+    <Reference Include="MpxjUtilities, Version=7.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj-common.7.4.0\lib\MpxjUtilities.dll</HintPath>
     </Reference>
-    <Reference Include="poi-3.17, Version=7.0.3.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-common.7.0.3\lib\poi-3.17.dll</HintPath>
+    <Reference Include="poi-3.17, Version=7.4.0.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj-common.7.4.0\lib\poi-3.17.dll</HintPath>
     </Reference>
-    <Reference Include="rtfparserkit-1.10.0, Version=7.0.3.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-common.7.0.3\lib\rtfparserkit-1.10.0.dll</HintPath>
+    <Reference Include="redmine-net452-api, Version=2.0.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\redmine-api.2.0.15\lib\net452\redmine-net452-api.dll</HintPath>
     </Reference>
-    <Reference Include="sqlite-jdbc-3.8.10.1, Version=7.0.3.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\net.sf.mpxj-common.7.0.3\lib\sqlite-jdbc-3.8.10.1.dll</HintPath>
+    <Reference Include="rtfparserkit-1.10.0, Version=7.4.0.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj-common.7.4.0\lib\rtfparserkit-1.10.0.dll</HintPath>
+    </Reference>
+    <Reference Include="sqlite-jdbc-3.8.10.1, Version=7.4.0.0, Culture=neutral, PublicKeyToken=8783d630753e2b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\net.sf.mpxj-common.7.4.0\lib\sqlite-jdbc-3.8.10.1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -173,21 +176,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ChartContainer.cs" />
-    <Compile Include="ChartSaver.cs" />
+    <Compile Include="RedmineSrc\RedmineProject.cs" />
+    <Compile Include="ReportSrc\ChartContainer.cs" />
+    <Compile Include="ReportSrc\ChartSaver.cs" />
     <Compile Include="ProjectRate.cs" />
+    <Compile Include="RedmineSrc\RedmineWorker.cs" />
     <Compile Include="ReportSavedWindow.xaml.cs">
       <DependentUpon>ReportSavedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PDFBuilder.cs" />
-    <Compile Include="ReportBuilder.cs" />
+    <Compile Include="ReportSrc\PDFBuilder.cs" />
+    <Compile Include="ReportSrc\ReportBuilder.cs" />
     <Compile Include="ResourceInformation.cs" />
     <Compile Include="TaskInformation.cs" />
     <Compile Include="TimeUnitStringConverter.cs" />
-    <Compile Include="WinFormsChartCreator.cs" />
+    <Compile Include="ReportSrc\WinFormsChartCreator.cs" />
     <Page Include="ReportSavedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,8 +215,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MSProjectAnalyzer.cs" />
-    <Compile Include="MSProjectFileWorker.cs" />
+    <Compile Include="MSProjectSrc\MSProjectFileParser.cs" />
+    <Compile Include="MSProjectSrc\MSProjectFileWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -239,12 +244,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\net.sf.mpxj-ikvm.7.0.3\build\net.sf.mpxj-ikvm.targets" Condition="Exists('..\packages\net.sf.mpxj-ikvm.7.0.3\build\net.sf.mpxj-ikvm.targets')" />
+  <Import Project="..\packages\net.sf.mpxj-ikvm.7.4.0\build\net.sf.mpxj-ikvm.targets" Condition="Exists('..\packages\net.sf.mpxj-ikvm.7.4.0\build\net.sf.mpxj-ikvm.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\net.sf.mpxj-ikvm.7.0.3\build\net.sf.mpxj-ikvm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\net.sf.mpxj-ikvm.7.0.3\build\net.sf.mpxj-ikvm.targets'))" />
+    <Error Condition="!Exists('..\packages\net.sf.mpxj-ikvm.7.4.0\build\net.sf.mpxj-ikvm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\net.sf.mpxj-ikvm.7.4.0\build\net.sf.mpxj-ikvm.targets'))" />
   </Target>
 </Project>
