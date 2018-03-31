@@ -37,16 +37,16 @@ namespace ProjectSuccessWPF
             
             foreach (TaskInformation t in tasksWithoutHierarhy)
             {
-                baselineDuration += t.BaselineDurationValue;
-                overtime += t.OvertimeWorkValue;
+                baselineDuration += t.Duration.Estimated;
+                overtime += t.Duration.Overtime;
                 projectCost += t.Cost;
                 projectOverCost += t.OverCost;
-                duration += t.DurationValue;
+                duration += t.Duration.TotalDuration();
             }
             double recOvertime = 0;
             foreach(ResourceInformation r in recources)
             {
-                recOvertime += r.OvertimeWorkDurationValue;
+                recOvertime += r.Duration.Overtime;
             }
             RecourcesTotalOverworkTime = recOvertime;
             MeanTaskDuration = duration / tasksWithoutHierarhy.Count;

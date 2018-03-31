@@ -20,6 +20,8 @@ namespace ProjectSuccessWPF
         PDFBuilder builder;
         ProjectRate rate;
 
+        IEnumerable<IProject> Projects { get; set; }
+
         List<TaskInformation> tasks;
         List<ResourceInformation> resources;
         List<ChartContainer> charts;
@@ -37,6 +39,7 @@ namespace ProjectSuccessWPF
         public MainWindow()
         {
             InitializeComponent();
+
             fileWorker = new MSProjectFileWorker();
             builder = new PDFBuilder();
             charts = new List<ChartContainer>();
@@ -51,7 +54,7 @@ namespace ProjectSuccessWPF
             };
 
             RedmineWorker redmine = new RedmineWorker();
-            redmine.LoadProjects();
+            Projects = redmine.LoadProjects();
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -63,11 +66,11 @@ namespace ProjectSuccessWPF
                     IsExpanded = true,
                     Header = "Задача \"" + taskInformation.TaskName + "\" (" + taskInformation.CompletePercentage + "%)"
                 };
-                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.BaselineDuration);
-                if (!taskInformation.Duration.StartsWith("0.0"))
-                    treeViewItem.Items.Add("Продолжительность: " + taskInformation.Duration);
-                if (taskInformation.OvertimeWork != "0.0")
-                    treeViewItem.Items.Add("Переработка: " + taskInformation.OvertimeWork);
+                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.Duration.Estimated);
+                if (taskInformation.Duration.TotalDuration() != 0)
+                    treeViewItem.Items.Add("Продолжительность: " + taskInformation.Duration.Spent);
+                if (taskInformation.Duration.Overtime !=0 )
+                    treeViewItem.Items.Add("Переработка: " + taskInformation.Duration.Overtime);
                 if (taskInformation.Cost != 0)
                     treeViewItem.Items.Add("Стоимость: " + taskInformation.Cost + currencySymbol);
                 if (taskInformation.OverCost != 0.0)
@@ -156,7 +159,7 @@ namespace ProjectSuccessWPF
                 collection.Add(new ColumnSeries
                 {
                     Title = tasks[i].TaskName,
-                    Values = new ChartValues<double> { tasks[i].DurationValue },
+                    Values = new ChartValues<double> { tasks[i].Duration.TotalDuration() },
                 });
             }
             TasksDurationChart.AxisX[0].Title = "Задачи";
@@ -187,7 +190,7 @@ namespace ProjectSuccessWPF
                 collection.Add(new PieSeries
                 {
                     Title = resources[i].ResourceName,
-                    Values = new ChartValues<double> { resources[i].WorkDurationValue },
+                    Values = new ChartValues<double> { resources[i].Duration.TotalDuration() },
                     DataLabels = true
                 });
             }
@@ -220,12 +223,12 @@ namespace ProjectSuccessWPF
             SeriesCollection collection = new SeriesCollection();
             for (int i = 0; i < tasks.Count; ++i)
             {
-                if (tasks[i].OvertimeWorkValue != 0)
+                if (tasks[i].Duration.Overtime != 0)
                 {
                     collection.Add(new ColumnSeries
                     {
                         Title = tasks[i].TaskName,
-                        Values = new ChartValues<double> { tasks[i].OvertimeWorkValue },
+                        Values = new ChartValues<double> { tasks[i].Duration.Overtime},
                     });
                 }
             }
@@ -318,7 +321,7 @@ namespace ProjectSuccessWPF
                 currencySymbol = projectAnalyzer.GetProjectProperties().getCurrencySymbol();
                 string forTaskSymbol = projectAnalyzer.GetProjectProperties().getBaselineDuration().toString();
                 taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
-                string forResourcesSymbol = resources[0].WorkDuration;
+                string forResourcesSymbol = "h";
                 resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
 
                 //Charts
@@ -348,6 +351,11 @@ namespace ProjectSuccessWPF
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+        }
+
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow().ShowDialog();
         }
     }
 }

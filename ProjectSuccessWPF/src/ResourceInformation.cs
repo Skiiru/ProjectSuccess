@@ -10,15 +10,12 @@ namespace ProjectSuccessWPF
     {
         Resource resource;
         List<Task> tasks;
-        int ID;
+        public int ID { get; private set; }
         public string ResourceName { get; private set; }
         public string GroupName { get; private set; }
         public double CostPerTimeUnit { get; private set; }
         public double Cost { get; private set; }
-        public string WorkDuration { get; private set; }
-        public double WorkDurationValue { get; private set; }
-        public string OvertimeWorkDuration { get; private set; }
-        public double OvertimeWorkDurationValue { get; private set; }
+        public WorkDuration Duration { get; private set; }
         public double OvertimeWorkCost { get; private set; }
 
 
@@ -29,35 +26,48 @@ namespace ProjectSuccessWPF
             ResourceName = resource.getName() ?? "Undefined";
             this.tasks = tasks ?? new List<Task>();
             Cost = resource.getCost().floatValue();
-            WorkDuration = resource.getBaselineWork().toString();
-            WorkDurationValue = TimeUnitStringConverter.ConvertTime(WorkDuration);
-            CostPerTimeUnit = Convert.ToSingle(Cost / Convert.ToDouble(WorkDuration.Remove(WorkDuration.Length - 3)));
             GroupName = resource.getGroup();
 
             Duration baselineWork = resource.getBaselineWork();
+            double duration = 0;
             if (baselineWork != null)
             {
-                double duration = 0;
                 if (resource.getType().toString() == "Work")
                     foreach (Task t in tasks)
                         //Sometimes there is a null task
                         if (t != null && t.getBaselineDuration() != null)
                             duration += t.getDuration().getDuration() - t.getBaselineDuration().getDuration();
-                OvertimeWorkDurationValue = duration * 8;
-                OvertimeWorkDuration = OvertimeWorkDurationValue + baselineWork.getUnits().toString();
-                OvertimeWorkCost = OvertimeWorkDurationValue * CostPerTimeUnit;
             }
-            else
-                OvertimeWorkDuration = "Undefined";
+            Duration = new WorkDuration(TimeUnitStringConverter.ConvertTime(resource.getBaselineWork().toString()), duration);
+            CostPerTimeUnit = Convert.ToSingle(Cost / Duration.TotalDuration());
+            OvertimeWorkCost = Duration.Overtime * CostPerTimeUnit;
+
         }
 
         public ResourceInformation(Resource resource) : this(resource, new List<Task>())
         { }
 
-        public ResourceInformation(Project project, User user)
+        //TODO: groups
+        public ResourceInformation(Project project, User user, WorkDuration duration)
         {
-            ResourceName = user.FirstName + " " + user.LastName;
+            ResourceName = user.Login;
             ID = user.Id;
+            Duration = duration;
+            foreach(var cfield in user.CustomFields)
+            {
+                if (cfield.Name.ToLower() == "ставка" || cfield.Name.ToLower() == "salary")
+                    try
+                    {
+                        CostPerTimeUnit = int.Parse(cfield.Values[0].Info);
+                    }
+                    catch
+                    {
+                        CostPerTimeUnit = 0;
+                    }
+            }
+            Cost = CostPerTimeUnit * Duration.TotalDuration();
+            OvertimeWorkCost = CostPerTimeUnit * Duration.Overtime;
+
         }
     }
 }

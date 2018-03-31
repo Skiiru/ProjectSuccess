@@ -67,12 +67,12 @@ namespace ProjectSuccessWPF
                 }
 
                 taskDurationChartAxisX.Add(t.TaskName);
-                tasksDurationChartAxisY.Add(t.DurationValue);
+                tasksDurationChartAxisY.Add(t.Duration.TotalDuration());
 
-                if (t.OvertimeWorkValue != 0)
+                if (t.Duration.Overtime != 0)
                 {
                     taskOverworkDurationChartAxisX.Add(t.TaskName);
-                    tasksOverworkDurationChartAxisY.Add(t.OvertimeWorkValue);
+                    tasksOverworkDurationChartAxisY.Add(t.Duration.Overtime);
                 }
             }
             tasksCostChart.Series[0].Points.DataBindXY(taskCostChartAxisX, tasksCostChartAxisY);
@@ -113,7 +113,7 @@ namespace ProjectSuccessWPF
             {
                 resNames.Add(r.ResourceName);
                 resourcesCostList.Add(r.Cost);
-                resourcesWorktimeList.Add(r.WorkDurationValue);
+                resourcesWorktimeList.Add(r.Duration.TotalDuration());
                 resourcesCostPerUseList.Add(r.CostPerTimeUnit);
             }
             resourcesCostChart.Series[0].Points.DataBindXY(resNames, resourcesCostList);

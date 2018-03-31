@@ -21,18 +21,15 @@ namespace ProjectSuccessWPF
         public string StartDateBaseline { get; private set; }
         public string FinishDate { get; private set; }
         public string FinishDateBaseline { get; private set; }
-        public string Duration { get; private set; }
-        public double DurationValue { get; private set; }
 
+        public WorkDuration Duration { get; private set; }
 
-        public string OvertimeWork { get; private set; }
-        public double OvertimeWorkValue { get; private set; }
-        public string BaselineDuration { get; private set; }
-        public double BaselineDurationValue { get; private set; }
+        //Cost
         public int Cost { get; private set; }
         public int ActualCost { get; private set; }
         public int RemainingCost { get; private set; }
         public double OverCost { get; private set; }
+
         public int CompletePercentage { get; private set; }
 
         public TaskInformation(Task task, List<Resource> resources)
@@ -56,72 +53,56 @@ namespace ProjectSuccessWPF
                 StartDateBaseline = FinishDateBaseline = ERRMSG_ISNOT_IN_BASELINE;
             }
 
-            Duration baselineDuration = task.getBaselineDuration();
-            if (baselineDuration != null)
+            if (task.getBaselineDuration() != null && task.getDuration() != null)
             {
-                Duration duration = task.getDuration();
-                BaselineDuration = baselineDuration.toString();
-                BaselineDurationValue = TimeUnitStringConverter.ConvertTime(BaselineDuration);
-                if (baselineDuration.getUnits() == duration.getUnits())
-                {
-                    if (duration.getUnits().ToString() == "h")
-                        OvertimeWorkValue = duration.getDuration() - baselineDuration.getDuration();
-                    else
-                        OvertimeWorkValue = (duration.getDuration() - baselineDuration.getDuration()) * 8;
-                    OvertimeWork = OvertimeWorkValue.ToString() + 'h';
-                }
-                else
-                {
-                    if (baselineDuration.compareTo(duration) > 0)
-                        OvertimeWork = "Convertation problems. Plese make sure that all duration parameters have same time units.";
-                    else
-                        OvertimeWork = "0.0";
-                    OvertimeWorkValue = 0;
-                }
+                Duration = new WorkDuration(
+                    TimeUnitStringConverter.ConvertTime(task.getBaselineDuration().toString()), 
+                    TimeUnitStringConverter.ConvertTime(task.getDuration().toString()));
             }
             else
-            {
-                BaselineDuration = OvertimeWork = ERRMSG_ISNOT_IN_BASELINE;
-                OvertimeWorkValue = 0;
-            }
+                Duration = new WorkDuration();
+
+
             OverCost = task.getCost().doubleValue() - task.getBaselineCost().doubleValue();
             TaskName = task.getName();
             Cost = task.getCost().intValue();
             ActualCost = task.getActualCost().intValue();
             RemainingCost = task.getRemainingCost().intValue();
-            Duration = task.getDuration().toString();
-            DurationValue = TimeUnitStringConverter.ConvertTime(Duration);
             CompletePercentage = task.getPercentageComplete().intValue();
         }
 
-        public TaskInformation(Issue issue)
+        public TaskInformation(Issue issue, ResourceInformation assignedTo)
         {
             TaskName = issue.Subject;
             ID = issue.Id;
 
-            BaselineDurationValue = issue.EstimatedHours.Value;
-            BaselineDuration = BaselineDurationValue + "h";
-
-            DurationValue = issue.SpentHours.Value;
-            Duration = DurationValue.ToString() + "h";
-
-            OvertimeWorkValue = (issue.SpentHours - issue.EstimatedHours).Value;
-            OvertimeWork = OvertimeWorkValue.ToString() + "h";
-
+            double est = 0, spent = 0;
+            if (issue.EstimatedHours.HasValue)
+                est = issue.EstimatedHours.Value;
+            if (issue.SpentHours.HasValue)
+                spent = issue.SpentHours.Value;
+            Duration = new WorkDuration(est, spent);
             CompletePercentage = int.Parse(issue.DoneRatio.Value.ToString());
-            StartDate = issue.StartDate == null ? issue.StartDate.ToString() : "Unknown";
-            FinishDate = issue.DueDate == null ? issue.DueDate.ToString() : "Unknown";
+            if (CompletePercentage == 100 && Duration.Spent == 0)
+            {
+                Duration.Spent = Duration.Estimated;
+                Duration.ReCalculateOvertime();
+            }
+            StartDateBaseline = StartDate = issue.StartDate == null ? issue.StartDate.ToString() : "Unknown";
+            FinishDateBaseline = FinishDate = issue.DueDate == null ? issue.DueDate.ToString() : "Unknown";
+
+            //Costs
+            double costPerHour = assignedTo.CostPerTimeUnit;
+            Cost = (int)(costPerHour * Duration.TotalDuration());
+            ActualCost = (int)(costPerHour * Duration.Spent);
+            if (CompletePercentage == 100)
+                RemainingCost = 0;
+            else
+                RemainingCost = (int)(costPerHour * (Duration.Estimated - Duration.Spent));
+            OverCost = (int)(costPerHour * Duration.Overtime);
 
             ChildTasks = new List<TaskInformation>();
-            foreach(IssueChild child in issue.Children)
-            {
-                
-            }
 
-            foreach(Redmine.Net.Api.Types.CustomField cfield in issue.CustomFields)
-            {
-
-            }
         }
 
         //Don't working when retun type is Task
@@ -136,16 +117,16 @@ namespace ProjectSuccessWPF
 
         public override string ToString()
         {
-            string result = TaskName + "(" + CompletePercentage + "): D - " + Duration + ", OD - " + OvertimeWork + ", OC - " + OverCost;
+            string result = TaskName + "(" + CompletePercentage + "): D - " + Duration + ", OD - " + Duration.Overtime+ ", OC - " + OverCost;
             return base.ToString();
         }
 
         public string GetDurations()
         {
-            string result = "плановая продолжительность - " + BaselineDuration + " (" + StartDate + " - " + FinishDate + ")";
+            string result = "плановая продолжительность - " + Duration.Estimated+ " (" + StartDate + " - " + FinishDate + ")";
             result += ", продолжительность - " + Duration;
-            if (OvertimeWork != "0.0")
-                result += ", переработка - " + OvertimeWork;
+            if (Duration.Overtime!= 0)
+                result += ", переработка - " + Duration.Overtime;
             return result;
         }
 

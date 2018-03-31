@@ -22,6 +22,7 @@
                 <MenuItem Header="Открыть файл MSProject" Name="OpenFilMenuItem" Click="OpenFilMenuItem_Click"></MenuItem>
                 <MenuItem Header="Создать очтёт" Name="CreateReportMenuItem" Click="CreateReportMenuItem_Click" IsEnabled="False"></MenuItem>
             </MenuItem>
+            <MenuItem Header="Настройки" Name="SettingsMenuItem" Click="SettingsMenuItem_Click"></MenuItem>
             <MenuItem Header="Справка" Name="HelpMenuItem" Click="HelpMenuItem_Click"></MenuItem>
             <MenuItem Header="Выход" Name="QuitMenuItem" Click="QuitMenuItem_Click"></MenuItem>
         </Menu>

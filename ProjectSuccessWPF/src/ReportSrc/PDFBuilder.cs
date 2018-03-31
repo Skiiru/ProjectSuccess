@@ -52,7 +52,7 @@ namespace ProjectSuccessWPF
             {
                 level++;
                 string currentLevelString = levelStr + "." + level.ToString();
-                if (t.OvertimeWorkValue != 0)
+                if (t.Duration.Overtime!= 0)
                 {
                     string paragraphText =
                        currentLevelString + ". \"" + t.TaskName + "\" (" + t.CompletePercentage + "%) : " +
@@ -173,11 +173,11 @@ namespace ProjectSuccessWPF
             foreach (TaskInformation t in tasks)
             {
                 level++;
-                if (t.OvertimeWorkValue != 0)
+                if (t.Duration.Overtime!= 0)
                 {
                     string paragraphText = level.ToString() + ". \"" + t.TaskName + "\": " + t.GetDurations();
-                    if (t.OvertimeWork != "0.0")
-                        paragraphText += ", переработка - " + t.OvertimeWork;
+                    if (t.Duration.Overtime != 0)
+                        paragraphText += ", переработка - " + t.Duration.Overtime;
                     paragraphText += ", ресурсы - ";
                     if (t.Resources.Count != 0)
                     {
@@ -202,9 +202,9 @@ namespace ProjectSuccessWPF
             foreach (ResourceInformation resInf in resources)
             {
                 //Sometimes there is "fake" resource in project, idk why
-                if (resInf.ResourceName != "Undefined" && resInf.OvertimeWorkDurationValue != 0)
+                if (resInf.ResourceName != "Undefined" && resInf.Duration.Overtime != 0)
                     document.Add(CreateParagraph(
-                        resInf.ResourceName + " (" + resInf.Cost + "): время работы - " + resInf.WorkDuration + ", переработки - " + resInf.OvertimeWorkDuration,
+                        resInf.ResourceName + " (" + resInf.Cost + "): время работы - " + resInf.Duration.TotalDuration() + ", переработки - " + resInf.Duration.Overtime,
                         textFontSize,
                         false));
             }

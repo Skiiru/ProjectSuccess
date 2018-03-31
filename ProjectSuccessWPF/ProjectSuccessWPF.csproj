@@ -176,23 +176,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RedmineSrc\RedmineProject.cs" />
-    <Compile Include="ReportSrc\ChartContainer.cs" />
-    <Compile Include="ReportSrc\ChartSaver.cs" />
-    <Compile Include="ProjectRate.cs" />
-    <Compile Include="RedmineSrc\RedmineWorker.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\IProject.cs" />
+    <Compile Include="src\MSProjectSrc\MSProjectProject.cs" />
+    <Compile Include="src\RedmineSrc\RedmineProject.cs" />
+    <Compile Include="src\ReportSrc\ChartContainer.cs" />
+    <Compile Include="src\ReportSrc\ChartSaver.cs" />
+    <Compile Include="src\ProjectRate.cs" />
+    <Compile Include="src\RedmineSrc\RedmineWorker.cs" />
     <Compile Include="ReportSavedWindow.xaml.cs">
       <DependentUpon>ReportSavedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReportSrc\PDFBuilder.cs" />
-    <Compile Include="ReportSrc\ReportBuilder.cs" />
-    <Compile Include="ResourceInformation.cs" />
-    <Compile Include="TaskInformation.cs" />
-    <Compile Include="TimeUnitStringConverter.cs" />
-    <Compile Include="ReportSrc\WinFormsChartCreator.cs" />
+    <Compile Include="src\ReportSrc\PDFBuilder.cs" />
+    <Compile Include="src\ReportSrc\ReportBuilder.cs" />
+    <Compile Include="src\ResourceInformation.cs" />
+    <Compile Include="src\TaskInformation.cs" />
+    <Compile Include="src\TimeUnitStringConverter.cs" />
+    <Compile Include="src\ReportSrc\WinFormsChartCreator.cs" />
+    <Compile Include="src\WorkDuration.cs" />
     <Page Include="ReportSavedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -213,10 +219,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MSProjectSrc\MSProjectFileParser.cs" />
-    <Compile Include="MSProjectSrc\MSProjectFileWorker.cs" />
+    <Compile Include="src\MSProjectSrc\MSProjectFileParser.cs" />
+    <Compile Include="src\MSProjectSrc\MSProjectFileWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -229,6 +239,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -236,10 +247,12 @@
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+    <Resource Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>AppSettings</CustomToolNamespace>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

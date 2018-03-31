@@ -12,13 +12,14 @@ namespace ProjectSuccessWPF
         {
             List<RedmineProject> result = new List<RedmineProject>();
 
-            RedmineManager manager = new RedmineManager(Properties.Settings.Default.RedmineHost, Properties.Settings.Default.RedmineApiKey);
+            RedmineManager manager = new RedmineManager(AppSettings.Settings.Default.RedmineHost, AppSettings.Settings.Default.RedmineApiKey);
             List<Issue> issues = manager.GetObjects<Issue>();
             List<User> users = manager.GetObjects<User>();
 
             foreach (Project project in manager.GetObjects<Project>())
             {
                 RedmineProject p = new RedmineProject(project, issues, users);
+                result.Add(p);
             }
 
             return result;
