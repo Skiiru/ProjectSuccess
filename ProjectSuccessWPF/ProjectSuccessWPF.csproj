@@ -179,8 +179,10 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\ChartSeriesCreator.cs" />
     <Compile Include="src\IProject.cs" />
     <Compile Include="src\MSProjectSrc\MSProjectProject.cs" />
+    <Compile Include="src\ProjectDates.cs" />
     <Compile Include="src\RedmineSrc\RedmineProject.cs" />
     <Compile Include="src\ReportSrc\ChartContainer.cs" />
     <Compile Include="src\ReportSrc\ChartSaver.cs" />

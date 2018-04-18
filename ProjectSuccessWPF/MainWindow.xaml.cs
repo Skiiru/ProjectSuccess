@@ -133,125 +133,7 @@ namespace ProjectSuccessWPF
             return result;
         }
 
-        SeriesCollection CreateTasksCostCostColumnSeries()
-        {
-            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < tasks.Count; ++i)
-            {
-                collection.Add(new ColumnSeries
-                {
-                    Title = tasks[i].TaskName,
-                    Values = new ChartValues<double> { tasks[i].Cost },
-                });
-            }
-            TaskCostChart.AxisX[0].Title = "Задачи";
-            TaskCostChart.AxisY[0].Title = "Цена, " + currencySymbol;
-            return collection;
-        }
 
-        SeriesCollection CreateTasksDurationCostColumnSeries()
-        {
-            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < tasks.Count; ++i)
-            {
-                collection.Add(new ColumnSeries
-                {
-                    Title = tasks[i].TaskName,
-                    Values = new ChartValues<double> { tasks[i].Duration.TotalDuration() },
-                });
-            }
-            TasksDurationChart.AxisX[0].Title = "Задачи";
-            TasksDurationChart.AxisY[0].Title = "Продолжительность, " + taskDurationSymbol;
-            return collection;
-        }
-
-        SeriesCollection CreateResourcesCostPieSeries()
-        {
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < resources.Count; ++i)
-            {
-                collection.Add(new PieSeries
-                {
-                    Title = resources[i].ResourceName,
-                    Values = new ChartValues<double> { resources[i].Cost },
-                    DataLabels = true
-                });
-            }
-            return collection;
-        }
-
-        SeriesCollection CreateResourcesWortimePieSeries()
-        {
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < resources.Count; ++i)
-            {
-                collection.Add(new PieSeries
-                {
-                    Title = resources[i].ResourceName,
-                    Values = new ChartValues<double> { resources[i].Duration.TotalDuration() },
-                    DataLabels = true
-                });
-            }
-            return collection;
-        }
-
-        SeriesCollection CreateTasksOverworkCostCoulumnSeries()
-        {
-            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < tasks.Count; ++i)
-            {
-                if (tasks[i].OverCost != 0)
-                {
-                    collection.Add(new ColumnSeries
-                    {
-                        Title = tasks[i].TaskName,
-                        Values = new ChartValues<double> { tasks[i].OverCost },
-                    });
-                }
-            }
-            TasksDurationChart.AxisX[0].Title = "Задачи";
-            TasksDurationChart.AxisY[0].Title = "Перерасход сресдств, " + currencySymbol;
-            return collection;
-        }
-
-        SeriesCollection CreateTasksOverworkDurationCoulumnSeries()
-        {
-            List<TaskInformation> tasks = projectAnalyzer.GetTasksWithoutHierarhy();
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < tasks.Count; ++i)
-            {
-                if (tasks[i].Duration.Overtime != 0)
-                {
-                    collection.Add(new ColumnSeries
-                    {
-                        Title = tasks[i].TaskName,
-                        Values = new ChartValues<double> { tasks[i].Duration.Overtime},
-                    });
-                }
-            }
-            TasksDurationChart.AxisX[0].Title = "Задачи";
-            TasksDurationChart.AxisY[0].Title = "Перерасход времени, " + taskDurationSymbol;
-            return collection;
-        }
-
-        SeriesCollection CreateResourceCostPerTimeUnitColumnSeries()
-        {
-            SeriesCollection collection = new SeriesCollection();
-            for (int i = 0; i < resources.Count; ++i)
-            {
-                collection.Add(new ColumnSeries
-                {
-                    Title = resources[i].ResourceName,
-                    Values = new ChartValues<double> { resources[i].CostPerTimeUnit},
-                });
-            }
-            TasksDurationChart.AxisX[0].Title = "Ресурсы";
-            TasksDurationChart.AxisY[0].Title = "Затраты за единицу времени / использования, " + currencySymbol;
-            return collection;
-        }
 
         private void QuitMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -325,13 +207,14 @@ namespace ProjectSuccessWPF
                 resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
 
                 //Charts
-                TaskCostChart.Series = CreateTasksCostCostColumnSeries();
-                TasksDurationChart.Series = CreateTasksDurationCostColumnSeries();
-                TasksOverworkDurationChart.Series = CreateTasksOverworkDurationCoulumnSeries();
-                TasksOverworkCostChart.Series = CreateTasksOverworkCostCoulumnSeries();
-                ResourcesCostPieChart.Series = CreateResourcesCostPieSeries();
-                ResourcesWorktimePieChart.Series = CreateResourcesWortimePieSeries();
-                ResourcesCostPerUseChart.Series = CreateResourceCostPerTimeUnitColumnSeries();
+                var tasksWithoutH = projectAnalyzer.GetTasksWithoutHierarhy();
+                ChartSeriesCreator.CreateTasksCostColumnSeries(tasksWithoutH, TaskCostChart, currencySymbol);
+                ChartSeriesCreator.CreateTasksDurationColumnSeries(tasksWithoutH, TasksDurationChart, taskDurationSymbol);
+                ChartSeriesCreator.CreateTasksOverworkDurationCoulumnSeries(tasksWithoutH, TasksOverworkDurationChart, taskDurationSymbol);
+                ChartSeriesCreator.CreateTasksOverworkCostCoulumnSeries(tasksWithoutH, TasksOverworkCostChart, currencySymbol);
+                ChartSeriesCreator.CreateResourcesCostPieSeries(resources, ResourcesCostPieChart);
+                ChartSeriesCreator.CreateResourcesWortimePieSeries(resources, ResourcesWorktimePieChart);
+                ChartSeriesCreator.CreateResourceCostPerTimeUnitColumnSeries(resources, ResourcesCostPerUseChart, currencySymbol);
 
                 //Enable buttons
                 CreateReportMenuItem.IsEnabled = true;

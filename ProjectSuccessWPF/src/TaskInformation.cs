@@ -1,5 +1,6 @@
 ﻿using net.sf.mpxj;
 using Redmine.Net.Api.Types;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
@@ -17,10 +18,7 @@ namespace ProjectSuccessWPF
         public List<ResourceInformation> Resources { get; private set; }
 
         //Dates
-        public string StartDate { get; private set; }
-        public string StartDateBaseline { get; private set; }
-        public string FinishDate { get; private set; }
-        public string FinishDateBaseline { get; private set; }
+        public ProjectDates Dates { get; private set; }
 
         public WorkDuration Duration { get; private set; }
 
@@ -41,16 +39,14 @@ namespace ProjectSuccessWPF
             ChildTasks = new List<TaskInformation>();
 
             //Dates
-            StartDate = task.getStart().toString();
-            FinishDate = task.getFinish().toString();
+            Dates = new ProjectDates(task.getStart(), task.getFinish());
             if (task.getBaselineStart() != null && task.getBaselineFinish() != null)
             {
-                StartDateBaseline = task.getBaselineStart().toString();
-                FinishDateBaseline = task.getBaselineFinish().toString();
+                Dates.SetBaseline(task.getBaselineStart(), task.getBaselineFinish());
             }
             else
             {
-                StartDateBaseline = FinishDateBaseline = ERRMSG_ISNOT_IN_BASELINE;
+                //TODO: ERR_MSG_NOT_NIN_BASELINE
             }
 
             if (task.getBaselineDuration() != null && task.getDuration() != null)
@@ -88,8 +84,7 @@ namespace ProjectSuccessWPF
                 Duration.Spent = Duration.Estimated;
                 Duration.ReCalculateOvertime();
             }
-            StartDateBaseline = StartDate = issue.StartDate == null ? issue.StartDate.ToString() : "Unknown";
-            FinishDateBaseline = FinishDate = issue.DueDate == null ? issue.DueDate.ToString() : "Unknown";
+            Dates = new ProjectDates(issue.StartDate, issue.DueDate);
 
             //Costs
             double costPerHour = assignedTo.CostPerTimeUnit;
@@ -123,7 +118,7 @@ namespace ProjectSuccessWPF
 
         public string GetDurations()
         {
-            string result = "плановая продолжительность - " + Duration.Estimated+ " (" + StartDate + " - " + FinishDate + ")";
+            string result = "плановая продолжительность - " + Duration.Estimated+ " (" + Dates.StartDate + " - " + Dates.FinishDate + ")";
             result += ", продолжительность - " + Duration;
             if (Duration.Overtime!= 0)
                 result += ", переработка - " + Duration.Overtime;
