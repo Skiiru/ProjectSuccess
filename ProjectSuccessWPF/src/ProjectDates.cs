@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace ProjectSuccessWPF
 {
-    class ProjectDates
+    public class ProjectDates
     {
         public DateTime StartDate { get; private set; }
         public DateTime StartDateBaseline { get; private set; }
         public DateTime FinishDate { get; private set; }
         public DateTime FinishDateBaseline { get; private set; }
+        public DateTime CreationDate { get; private set; }
 
         public ProjectDates(DateTime start, DateTime finish)
         {
@@ -44,6 +45,21 @@ namespace ProjectSuccessWPF
         {
             StartDateBaseline = start;
             FinishDateBaseline = finish;
+        }
+
+        public void SetCreatedDate(DateTime? date)
+        {
+            if (date.HasValue)
+                CreationDate = date.Value;
+            else
+                CreationDate = DateTime.Today;
+        }
+
+
+        public void SetCreatedDate(java.util.Date date)
+        {
+            CreationDate = new DateTime(1970, 1, 1, 4, 0, 0, DateTimeKind.Utc);
+            CreationDate = CreationDate.AddMilliseconds(date.getTime());
         }
 
         public void SetBaseline(java.util.Date bStart, java.util.Date bFinish)

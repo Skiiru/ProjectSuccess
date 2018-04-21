@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Redmine.Net.Api.Types;
 
 
 namespace ProjectSuccessWPF.Redmine
 {
-    class RedmineProject : IProject
+    public class RedmineProject : IProject
     {
         public string ProjectName { get; private set; }
         public int ProjectId { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public DateTime EndDate { get; private set; }
+        public int TasksCount { get { return Tasks.Count; } }
+        public int ResourcesCount { get { return Resources.Count; } }
+
         public List<TaskInformation> Tasks { get; private set; }
         public List<ResourceInformation> Resources { get; private set; }
         public List<string> Trackers { get; private set; }
@@ -20,6 +26,8 @@ namespace ProjectSuccessWPF.Redmine
             ProjectId = project.Id;
             Tasks = new List<TaskInformation>();
             Resources = new List<ResourceInformation>();
+            StartDate = DateTime.MaxValue;
+            EndDate = DateTime.MinValue;
 
             NameValueCollection parameters = new NameValueCollection();
             Dictionary<int, WorkDuration> usersWorkDuration = new Dictionary<int, WorkDuration>();
@@ -55,6 +63,14 @@ namespace ProjectSuccessWPF.Redmine
                 {
                     Tasks.Add(new TaskInformation(issue, Resources.Find(x => x.ID == issue.AssignedTo.Id)));
                 }
+            }
+
+            for (int i = 0; i < Tasks.Count; ++i)
+            {
+                if (Tasks[i].Dates.StartDate < StartDate)
+                    StartDate = Tasks[i].Dates.StartDate;
+                if (Tasks[i].Dates.FinishDate > EndDate)
+                    EndDate = Tasks[i].Dates.FinishDate;
             }
         }
 

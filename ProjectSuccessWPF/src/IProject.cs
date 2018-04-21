@@ -3,7 +3,7 @@
 
 namespace ProjectSuccessWPF
 {
-    interface IProject
+    public interface IProject
     {
         string ProjectName { get; }
         int ProjectId { get; }

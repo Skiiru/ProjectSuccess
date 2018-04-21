@@ -1,4 +1,5 @@
 ﻿using net.sf.mpxj;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
@@ -16,7 +17,7 @@ namespace ProjectSuccessWPF
         public List<TaskInformation> GetTasksWithoutHierarhy()
         {
             List<TaskInformation> taskList = new List<TaskInformation>();
-            foreach (TaskInformation t in this.GetTasksWithHierarhy())
+            foreach (TaskInformation t in GetTasksWithHierarhy())
             {
                 taskList.AddRange(GetFinalTasks(t));
             }
@@ -34,6 +35,7 @@ namespace ProjectSuccessWPF
             return result;
         }
 
+        [Obsolete("This method is deprecated. Use GetTasksWithoutHierarhy.")]
         public List<TaskInformation> GetTasksWithHierarhy()
         {
             List<TaskInformation> taskList = new List<TaskInformation>();

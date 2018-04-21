@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using net.sf.mpxj;
 
-namespace ProjectSuccessWPF.src.MSProjectSrc
+namespace ProjectSuccessWPF
 {
     class MSProjectProject : IProject
     {
@@ -15,8 +15,14 @@ namespace ProjectSuccessWPF.src.MSProjectSrc
 
         public ProjectRate Rate { get; private set; }
 
-        public MSProjectProject(ProjectFile project)
+        public MSProjectProject(MSProjectFileParser parser)
         {
+            Tasks = parser.GetTasksWithoutHierarhy();
+            Resources = parser.GetResources();
+            ProjectName = parser.GetProjectProperties().getName();
+            //Only one project in file
+            ProjectId = -1;
+            Rate = new ProjectRate(this);
 
         }
 

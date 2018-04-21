@@ -5,19 +5,22 @@ using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
 {
-    class TaskInformation
+    public class TaskInformation
     {
         Task task;
         public List<TaskInformation> ChildTasks { get; private set; }
 
         static string ERRMSG_ISNOT_IN_BASELINE = "Этой задачи нет в базовом плане.";
 
+        public enum TaskStatus { InWork, Closed };
+
         public string TaskName { get; private set; }
         int ID;
+        public string Tracker { get; private set; }
+        public TaskStatus Status { get; private set; }
 
         public List<ResourceInformation> Resources { get; private set; }
 
-        //Dates
         public ProjectDates Dates { get; private set; }
 
         public WorkDuration Duration { get; private set; }
@@ -65,12 +68,19 @@ namespace ProjectSuccessWPF
             ActualCost = task.getActualCost().intValue();
             RemainingCost = task.getRemainingCost().intValue();
             CompletePercentage = task.getPercentageComplete().intValue();
+            if (CompletePercentage == 100)
+                Status = TaskStatus.Closed;
+            else
+                Status = TaskStatus.InWork;
+            Tracker = "Undefined";
+            Dates.SetCreatedDate(task.getCreateDate());
         }
 
         public TaskInformation(Issue issue, ResourceInformation assignedTo)
         {
             TaskName = issue.Subject;
             ID = issue.Id;
+            Tracker = issue.Tracker.Name;
 
             double est = 0, spent = 0;
             if (issue.EstimatedHours.HasValue)
@@ -86,6 +96,8 @@ namespace ProjectSuccessWPF
             }
             Dates = new ProjectDates(issue.StartDate, issue.DueDate);
 
+            Dates.SetCreatedDate(issue.CreatedOn);
+
             //Costs
             double costPerHour = assignedTo.CostPerTimeUnit;
             Cost = (int)(costPerHour * Duration.TotalDuration());
@@ -96,10 +108,18 @@ namespace ProjectSuccessWPF
                 RemainingCost = (int)(costPerHour * (Duration.Estimated - Duration.Spent));
             OverCost = (int)(costPerHour * Duration.Overtime);
 
+            //TODO: issue status
+            if (CompletePercentage == 100)
+                Status = TaskStatus.Closed;
+            else
+                Status = TaskStatus.InWork;
+
+
             ChildTasks = new List<TaskInformation>();
 
         }
 
+        //TODO: remove
         //Don't working when retun type is Task
         /// <summary>
         /// Returning child tasks as array

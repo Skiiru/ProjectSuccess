@@ -76,6 +76,11 @@ namespace ProjectSuccessWPF
             }
         }
 
+        public void CreateReport(string path, IProject project, List<ChartContainer> charts)
+        {
+            CreateReport(path, project.Tasks, project.Resources, null, charts, project.Rate);
+        }
+
         public void CreateReport(
             string path,
             List<TaskInformation> tasks,

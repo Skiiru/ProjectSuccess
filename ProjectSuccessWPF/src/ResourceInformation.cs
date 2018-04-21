@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
 {
-    class ResourceInformation
+    public class ResourceInformation
     {
         Resource resource;
         List<Task> tasks;

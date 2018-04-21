@@ -176,11 +176,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="OpenProjectWindow.xaml.cs">
+      <DependentUpon>OpenProjectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\ChartSeriesCreator.cs" />
+    <Compile Include="src\FileDialogWorker.cs" />
+    <Compile Include="src\InWorkClosedCounter.cs" />
     <Compile Include="src\IProject.cs" />
+    <Compile Include="src\MessageWorker.cs" />
     <Compile Include="src\MSProjectSrc\MSProjectProject.cs" />
     <Compile Include="src\ProjectDates.cs" />
     <Compile Include="src\RedmineSrc\RedmineProject.cs" />
@@ -201,6 +207,10 @@
     <Compile Include="src\TimeUnitStringConverter.cs" />
     <Compile Include="src\ReportSrc\WinFormsChartCreator.cs" />
     <Compile Include="src\WorkDuration.cs" />
+    <Page Include="OpenProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ReportSavedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,7 +219,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="ProjectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -217,8 +227,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="ProjectWindow.xaml.cs">
+      <DependentUpon>ProjectWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SettingsWindow.xaml">

@@ -8,5 +8,8 @@
     <Setting Name="RedmineApiKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">7e3e220b51abf83ef9dc38af31c0ef1ab25c4010</Value>
     </Setting>
+    <Setting Name="DaysInSprint" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

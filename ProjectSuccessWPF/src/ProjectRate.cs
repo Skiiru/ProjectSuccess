@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectSuccessWPF
 {
-    class ProjectRate
+    public class ProjectRate
     {
         /// <summary>
         /// Normal value less then 130%, can be from 0% to +inf, overcost is too much
@@ -26,6 +26,8 @@ namespace ProjectSuccessWPF
         public double RecourcesTotalOverworkTime { get; private set; }
 
         static int MAX_TASK_DURATION = 16;
+
+        public ProjectRate(IProject project) : this(project.Tasks, project.Resources) { }
 
         public ProjectRate(List<TaskInformation> tasksWithoutHierarhy, List<ResourceInformation> recources)
         {

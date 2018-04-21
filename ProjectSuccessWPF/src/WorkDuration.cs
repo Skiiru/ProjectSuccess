@@ -1,7 +1,7 @@
 ﻿
 namespace ProjectSuccessWPF
 {
-    class WorkDuration
+    public class WorkDuration
     {
         public double Estimated { get; set; }
         public double Spent { get; set; }
