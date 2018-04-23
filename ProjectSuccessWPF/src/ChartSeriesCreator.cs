@@ -152,8 +152,8 @@ namespace ProjectSuccessWPF
 
             for (int i = 0; i < tasks.Count; ++i)
             {
-                if (tasks[i].Tracker != "Undefined" && !trackersCount.ContainsKey(tasks[i].Tracker))
-                    trackersCount.Add(tasks[i].TaskName, new InWorkClosedCounter());
+                if ((tasks[i].Tracker != "Undefined" || tasks[i].Tracker != string.Empty) && !trackersCount.ContainsKey(tasks[i].Tracker))
+                    trackersCount.Add(tasks[i].Tracker, new InWorkClosedCounter());
 
                 if (tasks[i].Dates.StartDate < startDate)
                     startDate = tasks[i].Dates.StartDate;
@@ -166,12 +166,14 @@ namespace ProjectSuccessWPF
                 trackersInwork.Add(new LineSeries
                 {
                     Title = kvp.Key + "(в работе)",
+                    Name = kvp.Key,
                     Values = new ChartValues<int>(),
                     PointGeometry = null
                 });
                 trackersClosed.Add(new LineSeries
                 {
                     Title = kvp.Key + "(закрытые)",
+                    Name = kvp.Key,
                     Values = new ChartValues<int>(),
                     PointGeometry = null
                 });
@@ -179,7 +181,7 @@ namespace ProjectSuccessWPF
 
             InWorkClosedCounter allTasksCounter = new InWorkClosedCounter();
 
-            for (DateTime i = startDate; i <= endDate; i = i.AddDays(AppSettings.Settings.Default.DaysInSprint))
+            for (DateTime i = startDate; i <= endDate.AddDays(AppSettings.Settings.Default.DaysInSprint); i = i.AddDays(AppSettings.Settings.Default.DaysInSprint))
             {
                 //Reset count
                 allTasksCounter.Clear();
@@ -201,13 +203,13 @@ namespace ProjectSuccessWPF
                         if (t.Status == TaskInformation.TaskStatus.Closed && t.Dates.FinishDate != null && t.Dates.FinishDate <= i)
                         {
                             allTasksCounter.ClosedCount++;
-                            if (t.Tracker != "Undefined")
+                            if (t.Tracker != "Undefined" || t.Tracker != string.Empty)
                                 trackersCount[t.Tracker].ClosedCount++;
                         }
                         else
                         {
                             allTasksCounter.InWorkCount++;
-                            if (t.Tracker != "Undefined")
+                            if (t.Tracker != "Undefined" || t.Tracker != string.Empty)
                                 trackersCount[t.Tracker].InWorkCount++;
                         }
                     }

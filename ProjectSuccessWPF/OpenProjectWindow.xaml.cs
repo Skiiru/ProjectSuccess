@@ -21,7 +21,7 @@ namespace ProjectSuccessWPF
     {
         FileDialogWorker FileDialogWorker;
         RedmineWorker redmineWorker;
-        List<Redmine.RedmineProject> Projects;
+        List<Redmine.RedmineProject> Projects { get; set; }
 
         public OpenProjectWindow()
         {
@@ -62,6 +62,7 @@ namespace ProjectSuccessWPF
             try
             {
                 Projects = redmineWorker.LoadProjects();
+                ProjectsListBox.ItemsSource = Projects;
             }
             catch (Exception ex)
             {
@@ -77,6 +78,12 @@ namespace ProjectSuccessWPF
         private void LoadRedmineMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LoadRedmineProjects();
+        }
+
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ProjectWindow projectWindow = new ProjectWindow((sender as ListBoxItem).Content as Redmine.RedmineProject);
+            projectWindow.ShowDialog();
         }
     }
 }

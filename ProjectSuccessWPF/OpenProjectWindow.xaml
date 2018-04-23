@@ -25,11 +25,17 @@
             <MenuItem Header="Справка" Name="HelpMenuItem" Click="HelpMenuItem_Click"></MenuItem>
             <MenuItem Header="Выход" Name="QuitMenuItem" Click="QuitMenuItem_Click"></MenuItem>
         </Menu>
-        <ListBox Name="ProjectsListBox" Grid.Row="1" Margin="10" ItemsSource="{Binding Projects}">
+        <ListBox Name="ProjectsListBox" Grid.Row="1" Margin="10" DataContext="{Binding Path=Projects, Mode=TwoWay}" HorizontalAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="5" BorderThickness="1" BorderBrush="SteelBlue" CornerRadius="4">
-                        <Grid>
+                    <Border BorderThickness="0 3 0 3" BorderBrush="Black" HorizontalAlignment="Stretch">
+                        <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
@@ -39,12 +45,30 @@
                                 <RowDefinition></RowDefinition>
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Label Name="ProjectNameLabel">Название проекта:</Label>
-                            <Label Name="TasksCountLabel" Grid.Column="1">Кол-во задач:</Label>
-                            <Label Name="StartDateLabel" Grid.Column="2">Дата начала:</Label>
-                            <Label Name="EndDateLabel" Grid.Column="2" Grid.Row="1">Дата окончания:</Label>
-                            <Label Name="ProjectIDLabel" Grid.Row="1">ID: </Label>
-                            <Label Name="ResourcesCount" Grid.Row="1" Grid.Column="1">Кол-во ресурсов: </Label>
+                            <DockPanel Margin="5">
+                                <TextBlock FontWeight="SemiBold">Проект: </TextBlock>
+                                <TextBlock Name="ProjectNameTB" Text="{Binding Path=ProjectName}"></TextBlock>
+                            </DockPanel>
+                            <DockPanel Margin="5" Grid.Column="1">
+                                <TextBlock FontWeight="SemiBold">Кол-во задач:</TextBlock>
+                                <TextBlock Name="TasksCountTB" Text="{Binding Path=TasksCount}"></TextBlock>
+                            </DockPanel>
+                            <DockPanel Margin="5" Grid.Column="2">
+                                <TextBlock FontWeight="SemiBold">Дата начала:</TextBlock>
+                                <TextBlock Name="StartDateTB" Text="{Binding Path=StartDate}"></TextBlock>
+                            </DockPanel>
+                            <DockPanel Margin="5" Grid.Column="2" Grid.Row="1">
+                                <TextBlock FontWeight="SemiBold">Дата окончания:</TextBlock>
+                                <TextBlock Name="EndDateTB" Text="{Binding Path=EndDate}"></TextBlock>
+                            </DockPanel>
+                            <DockPanel Grid.Row="1" Margin="5">
+                                <TextBlock FontWeight="SemiBold">ID:</TextBlock>
+                                <TextBlock Name="ProjectIDTB" Text="{Binding Path=ProjectId}"></TextBlock>
+                            </DockPanel>
+                            <DockPanel Grid.Row="1" Grid.Column="1" Margin="5">
+                                <TextBlock FontWeight="SemiBold">Кол-во ресурсов:</TextBlock>
+                                <TextBlock Name="ResourcesCountTB" Text="{Binding Path=ResourcesCount}"></TextBlock>
+                            </DockPanel>
                         </Grid>
                     </Border>
                 </DataTemplate>

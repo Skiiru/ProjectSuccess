@@ -54,10 +54,10 @@ namespace ProjectSuccessWPF
             Project = project;
 
             //Hide cost params
-            ResourcesCostPerUseChartTab.Visibility = Visibility.Hidden;
-            TaskCostChartTab.Visibility = Visibility.Hidden;
-            ResourcesCostPieChartTab.Visibility = Visibility.Hidden;
-            TasksOverworkCostChartTab.Visibility = Visibility.Hidden;
+            ResourcesCostPerUseChartTab.Visibility = Visibility.Collapsed;
+            TaskCostChartTab.Visibility = Visibility.Collapsed;
+            ResourcesCostPieChartTab.Visibility = Visibility.Collapsed;
+            TasksOverworkCostChartTab.Visibility = Visibility.Collapsed;
         }
 
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
@@ -82,7 +82,7 @@ namespace ProjectSuccessWPF
                 {
                     IsExpanded = true
                 };
-                if (taskInformation.Resources.Count != 0)
+                if (taskInformation.Resources !=null && taskInformation.Resources.Count != 0)
                 {
                     resourcesItem.Header = "Ресурсы";
                     foreach (ResourceInformation resource in taskInformation.Resources)
@@ -162,12 +162,23 @@ namespace ProjectSuccessWPF
             ResourcesDataGrid.ItemsSource = Project.Resources;
 
             //Symbols
-            hoursPerDay = msProjectParser.GetProjectProperties().getMinutesPerDay().doubleValue() / 60;
-            currencySymbol = msProjectParser.GetProjectProperties().getCurrencySymbol();
-            string forTaskSymbol = msProjectParser.GetProjectProperties().getBaselineDuration().toString();
-            taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
-            string forResourcesSymbol = "h";
-            resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
+            if (Project is MSProjectProject)
+            {
+                hoursPerDay = msProjectParser.GetProjectProperties().getMinutesPerDay().doubleValue() / 60;
+                currencySymbol = msProjectParser.GetProjectProperties().getCurrencySymbol();
+                string forTaskSymbol = msProjectParser.GetProjectProperties().getBaselineDuration().toString();
+                taskDurationSymbol = forTaskSymbol[forTaskSymbol.Length - 1].ToString();
+                string forResourcesSymbol = "h";
+                resourcesWorktimeSymbol = forResourcesSymbol[forResourcesSymbol.Length - 1].ToString();
+            }
+            else
+            {
+                //TODO: settings
+                hoursPerDay = 8;
+                currencySymbol = "Р";
+                taskDurationSymbol = "h";
+                resourcesWorktimeSymbol = "h";
+            }
 
             //Charts
             if (Project is MSProjectProject)
