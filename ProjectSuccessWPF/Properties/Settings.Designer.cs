@@ -58,5 +58,41 @@ namespace AppSettings {
                 this["DaysInSprint"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin")]
+        public string RedmineLogin {
+            get {
+                return ((string)(this["RedmineLogin"]));
+            }
+            set {
+                this["RedmineLogin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin")]
+        public string RedminePassword {
+            get {
+                return ((string)(this["RedminePassword"]));
+            }
+            set {
+                this["RedminePassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LOGIN")]
+        public string RedmineConnectionType {
+            get {
+                return ((string)(this["RedmineConnectionType"]));
+            }
+            set {
+                this["RedmineConnectionType"] = value;
+            }
+        }
     }
 }

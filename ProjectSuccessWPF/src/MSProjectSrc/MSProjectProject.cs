@@ -15,11 +15,14 @@ namespace ProjectSuccessWPF
 
         public ProjectRate Rate { get; private set; }
 
+        public string Status { get; private set; }
+
         public MSProjectProject(MSProjectFileParser parser)
         {
             Tasks = parser.GetTasksWithoutHierarhy();
             Resources = parser.GetResources();
             ProjectName = parser.GetProjectProperties().getName();
+            Status = parser.GetProjectProperties().getContentStatus();
             //Only one project in file
             ProjectId = -1;
             Rate = new ProjectRate(this);

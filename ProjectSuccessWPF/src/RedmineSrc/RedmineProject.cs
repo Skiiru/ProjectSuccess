@@ -19,6 +19,7 @@ namespace ProjectSuccessWPF.Redmine
         public List<ResourceInformation> Resources { get; private set; }
         public List<string> Trackers { get; private set; }
         public ProjectRate Rate { get; private set; }
+        public string Status { get; private set; }
 
         public RedmineProject(Project project, List<Issue> issues, List<User> users)
         {
@@ -28,6 +29,7 @@ namespace ProjectSuccessWPF.Redmine
             Resources = new List<ResourceInformation>();
             StartDate = DateTime.MaxValue;
             EndDate = DateTime.MinValue;
+            Status = project.Status.ToString();
 
             NameValueCollection parameters = new NameValueCollection();
             Dictionary<int, WorkDuration> usersWorkDuration = new Dictionary<int, WorkDuration>();
@@ -72,6 +74,8 @@ namespace ProjectSuccessWPF.Redmine
                 if (Tasks[i].Dates.FinishDate > EndDate)
                     EndDate = Tasks[i].Dates.FinishDate;
             }
+
+            Rate = new ProjectRate(this);
         }
 
         public void AddTask(TaskInformation t)

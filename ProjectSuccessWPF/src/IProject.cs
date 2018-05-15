@@ -10,6 +10,7 @@ namespace ProjectSuccessWPF
         List<TaskInformation> Tasks { get; }
         List<ResourceInformation> Resources { get; }
         ProjectRate Rate { get; }
+        string Status { get; }
 
         void AddTask(TaskInformation t);
         void AddResource(ResourceInformation r);

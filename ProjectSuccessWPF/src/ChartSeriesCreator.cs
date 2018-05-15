@@ -128,6 +128,9 @@ namespace ProjectSuccessWPF
 
         public static void CreateTasksCountLineSeries(List<TaskInformation> tasks, CartesianChart chart)
         {
+            chart.AxisX.Clear();
+            chart.AxisY.Clear();
+
             SeriesCollection collection = new SeriesCollection();
             List<LineSeries> trackersInwork = new List<LineSeries>();
             List<LineSeries> trackersClosed = new List<LineSeries>();
@@ -152,7 +155,7 @@ namespace ProjectSuccessWPF
 
             for (int i = 0; i < tasks.Count; ++i)
             {
-                if ((tasks[i].Tracker != "Undefined" || tasks[i].Tracker != string.Empty) && !trackersCount.ContainsKey(tasks[i].Tracker))
+                if ((tasks[i].Tracker != "Undefined" && tasks[i].Tracker != string.Empty) && !trackersCount.ContainsKey(tasks[i].Tracker))
                     trackersCount.Add(tasks[i].Tracker, new InWorkClosedCounter());
 
                 if (tasks[i].Dates.StartDate < startDate)
@@ -198,18 +201,18 @@ namespace ProjectSuccessWPF
                     //        closed++;
                     //    else
                     //        inWork++;
-                    if (t.Dates.CreationDate <= i)
+                    if (t.Dates.StartDate <= i)
                     {
                         if (t.Status == TaskInformation.TaskStatus.Closed && t.Dates.FinishDate != null && t.Dates.FinishDate <= i)
                         {
                             allTasksCounter.ClosedCount++;
-                            if (t.Tracker != "Undefined" || t.Tracker != string.Empty)
+                            if (t.Tracker != "Undefined" && t.Tracker != string.Empty)
                                 trackersCount[t.Tracker].ClosedCount++;
                         }
                         else
                         {
                             allTasksCounter.InWorkCount++;
-                            if (t.Tracker != "Undefined" || t.Tracker != string.Empty)
+                            if (t.Tracker != "Undefined" && t.Tracker != string.Empty)
                                 trackersCount[t.Tracker].InWorkCount++;
                         }
                     }

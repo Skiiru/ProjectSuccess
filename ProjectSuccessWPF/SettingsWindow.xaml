@@ -6,7 +6,7 @@
         xmlns:properties="clr-namespace:AppSettings"
         xmlns:local="clr-namespace:ProjectSuccessWPF"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="200" Width="400" WindowStyle="ToolWindow">
+        Title="SettingsWindow" Height="250" Width="400" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -42,9 +42,26 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
+            <TabItem Header="Общие">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"></RowDefinition>
+                        <RowDefinition Height="40"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Margin="5">Кол-во дней в спринте:</Label>
+                    <TextBox Name="DaysInSprintTB" Margin="10" Grid.Column="1" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=DaysInSprint}"></TextBox>
+                </Grid>
+            </TabItem>
             <TabItem Header="Redmine">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
@@ -52,10 +69,22 @@
                         <ColumnDefinition Width="100"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Margin="5">Host:</Label>
+                    <Label Margin="3">Host:</Label>
                     <TextBox Name="HostTB" Grid.Column="1" Margin="5" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineHost}"></TextBox>
-                    <Label Margin="5" Grid.Row="1">ApiKey:</Label>
-                    <TextBox Name="ApiKeyTB" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineApiKey}"></TextBox>
+                    <StackPanel Grid.Row="1" Grid.RowSpan="2">
+                        <DockPanel>
+                            <RadioButton Name="ApiRB" IsChecked="True" GroupName="Connection" Margin="10, 12, 0, 0"></RadioButton>
+                            <Label Margin="5">ApiKey:</Label>
+                        </DockPanel>
+                        <DockPanel>
+                            <RadioButton Name="LoginRB" GroupName="Connection" Margin="10, 12, 0, 0"></RadioButton>
+                            <Label Margin="5" Grid.Row="1">Login:</Label>
+                        </DockPanel>
+                    </StackPanel>
+                    <Label Grid.Row="3" Margin="20,5,10,0">Password:</Label>
+                    <TextBox Name="ApiKeyTB" Margin="5" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=ApiRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineApiKey}"></TextBox>
+                    <TextBox Name="RedmineLoginTB" Margin="5" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding ElementName=LoginRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineLogin}"></TextBox>
+                    <TextBox Name="RedminePasswordTB" Margin="5" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding ElementName=LoginRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedminePassword}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem Header="MSProject">

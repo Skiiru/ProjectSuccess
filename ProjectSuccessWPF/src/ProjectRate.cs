@@ -25,6 +25,10 @@ namespace ProjectSuccessWPF
 
         public double RecourcesTotalOverworkTime { get; private set; }
 
+        public int AnomalyTasksCount { get; private set; } //Anomaly types: finished but whithout finish date or percentage etc.
+
+        public int DeviationTasksCount { get; private set; }
+
         static int MAX_TASK_DURATION = 16;
 
         public ProjectRate(IProject project) : this(project.Tasks, project.Resources) { }
@@ -36,7 +40,9 @@ namespace ProjectSuccessWPF
             double duration = 0;
             double baselineDuration = 0;
             double overtime = 0;
-            
+            AnomalyTasksCount = 0;
+            DeviationTasksCount = 0;
+
             foreach (TaskInformation t in tasksWithoutHierarhy)
             {
                 baselineDuration += t.Duration.Estimated;
@@ -44,6 +50,12 @@ namespace ProjectSuccessWPF
                 projectCost += t.Cost;
                 projectOverCost += t.OverCost;
                 duration += t.Duration.TotalDuration();
+
+                if (t.Duration.Overtime != 0)
+                    DeviationTasksCount++;
+
+                if (t.Status == TaskInformation.TaskStatus.Closed && (t.CompletePercentage != 100 ^ t.Dates.FinishDate != null))
+                    AnomalyTasksCount++;
             }
             double recOvertime = 0;
             foreach(ResourceInformation r in recources)

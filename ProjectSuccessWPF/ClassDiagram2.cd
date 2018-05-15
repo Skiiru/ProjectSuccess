@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ProjectSuccessWPF.App" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.HelpWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HelpWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.OpenProjectWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAACACEAAAAAAIAAAAAAAAAAQEAAKAAAAAAAwA=</HashCode>
+      <FileName>OpenProjectWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.ProjectWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACECAGEAAAggAAhCAAAFIAIAAAABIIAAAAAAAA=</HashCode>
+      <FileName>ProjectWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.ReportSavedWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAABAAgAAAAAA=</HashCode>
+      <FileName>ReportSavedWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.SettingsWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>SettingsWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.ChartSeriesCreator" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAACgAAoAAAAAACAAgAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>src\ChartSeriesCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.FileDialogWorker" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAQAAAAAAEAEAABABAAAAAAAA=</HashCode>
+      <FileName>src\FileDialogWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.InWorkClosedCounter" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAEAAABAAAA=</HashCode>
+      <FileName>src\InWorkClosedCounter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.MessageWorker" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\MessageWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.MSProjectFileParser" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAACAAAAAAAAAAgAIgAQAAAACAAAAAA=</HashCode>
+      <FileName>src\MSProjectSrc\MSProjectFileParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.MSProjectFileWorker" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>src\MSProjectSrc\MSProjectFileWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.MSProjectProject" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAACAAIAAAAAAACAAAAAAABAAAAAAAAAAIAAQAAAA=</HashCode>
+      <FileName>src\MSProjectSrc\MSProjectProject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProjectSuccessWPF.ProjectDates" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAIAAAAICAAAAAAAAAAACAAAAAAAAEAAAAEAAAAA=</HashCode>
+      <FileName>src\ProjectDates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.ProjectRate" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAIAIAAIAAAAAAAQAAAEAAAAAAAACACAADAAgA=</HashCode>
+      <FileName>src\ProjectRate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.RedmineWorker" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>src\RedmineSrc\RedmineWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.ChartContainer" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>src\ReportSrc\ChartContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.ChartSaver" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACgAAAAAAAIACAAAAAAAAAAIAAAAQIIAAAAAAAAA=</HashCode>
+      <FileName>src\ReportSrc\ChartSaver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.PDFBuilder" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAJAAAAAAACEAAAAAAAAAAAgIAIAACAAAQAAAABAAAA=</HashCode>
+      <FileName>src\ReportSrc\PDFBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.ReportBuilder" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\ReportSrc\ReportBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.WinFormsChartCreator" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\ReportSrc\WinFormsChartCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.ResourceInformation" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAgAAACgCAAAAEAABAAAAAAAAgAAAAAAAAAAAE=</HashCode>
+      <FileName>src\ResourceInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.TaskInformation" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAkIQACgAAMBgAAABAQAAAAAAAAQAAAAABCBAQ=</HashCode>
+      <FileName>src\TaskInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.TimeUnitStringConverter" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAEAIAAAA=</HashCode>
+      <FileName>src\TimeUnitStringConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.WorkDuration" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgEAAAAAAAAAAAIAAAACgABAAAAAAA=</HashCode>
+      <FileName>src\WorkDuration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.Properties.Resources" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppSettings.Settings" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAIAAAAEABAAAAAAAAAAAIAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjectSuccessWPF.Redmine.RedmineProject" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAACAAIAAACAAACAAAAAAgBAAAKAAAAAAIAEQAAAA=</HashCode>
+      <FileName>src\RedmineSrc\RedmineProject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="ProjectSuccessWPF.IProject" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAACAAIAAAAAAACAAAAAAABAAAAAAAAAAIAAQAAAA=</HashCode>
+      <FileName>src\IProject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

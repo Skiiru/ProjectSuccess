@@ -258,6 +258,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <Resource Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>

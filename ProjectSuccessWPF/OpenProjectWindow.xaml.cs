@@ -51,8 +51,10 @@ namespace ProjectSuccessWPF
         {
             if (FileDialogWorker.OpenFile())
             {
+                this.Visibility = Visibility.Collapsed;
                 ProjectWindow projectWindow = new ProjectWindow(FileDialogWorker);
                 projectWindow.ShowDialog();
+                this.Visibility = Visibility.Visible;
             }
 
         }
@@ -66,7 +68,7 @@ namespace ProjectSuccessWPF
             }
             catch (Exception ex)
             {
-                MessageWorker.ShowError("Загрузка проектов из Redmine не удалась. Проверьте настройки подключения.");
+                MessageWorker.ShowError("Загрузка проектов из Redmine не удалась. Проверьте настройки подключения. Ошибка: " + ex.Message);
             }
         }
 
@@ -82,8 +84,24 @@ namespace ProjectSuccessWPF
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            this.Visibility = Visibility.Collapsed;
             ProjectWindow projectWindow = new ProjectWindow((sender as ListBoxItem).Content as Redmine.RedmineProject);
             projectWindow.ShowDialog();
+            this.Visibility = Visibility.Visible;
+        }
+
+        private void ProjectsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var buff = sender as ListBox;
+            var proj = (buff.SelectedItem as IProject);
+            if (proj != null)
+            {
+                MeanTaskDurationTB.Text = proj.Rate.MeanTaskDuration.ToString();
+                AnomalyTaskCountTB.Text = proj.Rate.AnomalyTasksCount.ToString();
+                DeviationTaskCountTB.Text = proj.Rate.DeviationTasksCount.ToString();
+                ProjectStatusTB.Text = proj.Status;
+                ChartSeriesCreator.CreateTasksCountLineSeries(proj.Tasks, TasksCountChart);
+            }
         }
     }
 }

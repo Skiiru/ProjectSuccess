@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:ProjectSuccessWPF"
         mc:Ignorable="d"
         ContentRendered="Window_ContentRendered"
@@ -15,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
         </Grid.RowDefinitions>
         <Menu Grid.ColumnSpan="2">
             <MenuItem Header="Файл">
@@ -25,7 +27,7 @@
             <MenuItem Header="Справка" Name="HelpMenuItem" Click="HelpMenuItem_Click"></MenuItem>
             <MenuItem Header="Выход" Name="QuitMenuItem" Click="QuitMenuItem_Click"></MenuItem>
         </Menu>
-        <ListBox Name="ProjectsListBox" Grid.Row="1" Margin="10" DataContext="{Binding Path=Projects, Mode=TwoWay}" HorizontalAlignment="Stretch">
+        <ListBox Name="ProjectsListBox" Grid.Row="1" Grid.RowSpan="2" Margin="5" SelectionChanged="ProjectsListBox_SelectionChanged" DataContext="{Binding Path=Projects, Mode=TwoWay}" HorizontalAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -74,5 +76,29 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <lvc:CartesianChart Name="TasksCountChart" LegendLocation="Right" Grid.Column="1" Grid.Row="1" Margin="5">
+        </lvc:CartesianChart>
+        <Border CornerRadius="5" BorderThickness="2" BorderBrush="LightGray" Grid.Row="2" Grid.Column="1" Margin="5">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label>Средняя продолжительность задач:</Label>
+                <Label Grid.Row="1">Количество задача с отклонениями:</Label>
+                <Label Grid.Row="2">Количество неполностью заполненных задач:</Label>
+                <Label Grid.Row="3">Статус проекта:</Label>
+                <TextBlock Grid.Column="1" Margin="5" Name="MeanTaskDurationTB"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Name="DeviationTaskCountTB" Margin="5"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="2" Name="AnomalyTaskCountTB" Margin="5"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="3" Margin="5" Name="ProjectStatusTB"></TextBlock>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

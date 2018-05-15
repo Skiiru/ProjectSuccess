@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace ProjectSuccessWPF
 {
@@ -22,13 +10,32 @@ namespace ProjectSuccessWPF
         public SettingsWindow()
         {
             InitializeComponent();
+
+            if (AppSettings.Settings.Default.RedmineConnectionType != "API")
+                LoginRB.IsChecked = true;
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            AppSettings.Settings.Default.RedmineHost = HostTB.Text;
-            AppSettings.Settings.Default.RedmineApiKey = ApiKeyTB.Text;
-            Close();
+
+            if (int.TryParse(DaysInSprintTB.Text, out int days) && days > 0)
+            {
+                AppSettings.Settings.Default.RedmineHost = HostTB.Text;
+                AppSettings.Settings.Default.RedmineApiKey = ApiKeyTB.Text;
+                AppSettings.Settings.Default.RedmineLogin = RedmineLoginTB.Text;
+                AppSettings.Settings.Default.RedminePassword = RedminePasswordTB.Text;
+                AppSettings.Settings.Default.DaysInSprint = days;
+                if (ApiRB.IsChecked.HasValue && ApiRB.IsChecked.Value)
+                    AppSettings.Settings.Default.RedmineConnectionType = "API";
+                else
+                    AppSettings.Settings.Default.RedmineConnectionType = "LOGIN";
+                AppSettings.Settings.Default.Save();
+                Close();
+            }
+            else
+            {
+                MessageWorker.ShowError("Неверно утсновлен параметр \"Кол-во дней в спринте\"");
+            }
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)

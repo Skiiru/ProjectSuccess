@@ -11,5 +11,14 @@
     <Setting Name="DaysInSprint" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
+    <Setting Name="RedmineLogin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="RedminePassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="RedmineConnectionType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">LOGIN</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
