@@ -29,7 +29,7 @@ namespace ProjectSuccessWPF
 
         public int DeviationTasksCount { get; private set; }
 
-        static int MAX_TASK_DURATION = 16;
+        double PreferTaskDuration;
 
         public ProjectRate(IProject project) : this(project.Tasks, project.Resources) { }
 
@@ -51,24 +51,29 @@ namespace ProjectSuccessWPF
                 projectOverCost += t.OverCost;
                 duration += t.Duration.TotalDuration();
 
-                if (t.Duration.Overtime != 0)
-                    DeviationTasksCount++;
-
-                if (t.Status == TaskInformation.TaskStatus.Closed && (t.CompletePercentage != 100 ^ t.Dates.FinishDate != null))
+                if (t.IsAnomaly)
                     AnomalyTasksCount++;
+
+                if (t.HaveDeviation)
+                    DeviationTasksCount++;
             }
+
             double recOvertime = 0;
-            foreach(ResourceInformation r in recources)
+            foreach (ResourceInformation r in recources)
             {
                 recOvertime += r.Duration.Overtime;
             }
             RecourcesTotalOverworkTime = recOvertime;
             MeanTaskDuration = duration / tasksWithoutHierarhy.Count;
-            MeanTaskDurationRate = 100 * MeanTaskDuration / MAX_TASK_DURATION;
+            MeanTaskDurationRate = 100 * MeanTaskDuration / PreferTaskDuration;
             ProjectOverCost = projectOverCost;
             ProjectOverCostPercentage = (projectOverCost / projectCost) * 100;
             ProjectOvertime = overtime;
             ProjectOvertimeRate = (overtime / baselineDuration) * 100;
+            PreferTaskDuration =
+                AppSettings.Settings.Default.PreferTaskDurationSource == "MEAN" ?
+                MeanTaskDuration :
+                AppSettings.Settings.Default.PreferTaskDuration;
         }
 
         /// <summary>

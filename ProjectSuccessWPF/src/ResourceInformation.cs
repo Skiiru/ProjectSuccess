@@ -17,6 +17,7 @@ namespace ProjectSuccessWPF
         public double Cost { get; private set; }
         public WorkDuration Duration { get; private set; }
         public double OvertimeWorkCost { get; private set; }
+        
 
 
         public ResourceInformation(Resource resource, List<Task> tasks)

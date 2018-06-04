@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ProjectSuccessWPF
 {
@@ -60,6 +61,7 @@ namespace ProjectSuccessWPF
             TasksOverworkCostChartTab.Visibility = Visibility.Collapsed;
         }
 
+        [Obsolete("This method using hierarchy tasks. It is deprecated.")]
         void CreateTreeViewItems(List<TaskInformation> tasks, ref TreeViewItem item)
         {
             foreach (TaskInformation taskInformation in tasks)
@@ -122,41 +124,7 @@ namespace ProjectSuccessWPF
         private void PrepareWindowContent()
         {
             //Tree view
-            TasksTreeView.Items.Clear();
-            TreeViewItem firstItem = new TreeViewItem
-            {
-                Header = "Текущий проект"
-            };
-
-            if (Project.Rate != null)
-            {
-                if (!double.IsNaN(Project.Rate.ProjectOverCostPercentage))
-                {
-                    string s = "Оценка перерасхода средств: " + Math.Round(Project.Rate.ProjectOverCostPercentage, 2) + "%, " + Project.Rate.GetOvercostRateString() + ".";
-                    firstItem.Items.Add(s);
-                }
-
-                if (!double.IsNaN(Project.Rate.MeanTaskDurationRate))
-                {
-                    string s = "Оценка средней продолжительность задач: " + Math.Round(Project.Rate.MeanTaskDurationRate, 2) + "%, " + Project.Rate.GetMeanTaskDurationString() + '.';
-                    firstItem.Items.Add(s);
-                }
-
-                if (!double.IsNaN(Project.Rate.ProjectOvertimeRate))
-                {
-                    string s = "Оценка перерасхода времени: " + Math.Round(Project.Rate.ProjectOvertimeRate, 2) + "%, " + Project.Rate.GetProjectOvertimeString() + '.';
-                    firstItem.Items.Add(s);
-                }
-
-                if (!double.IsNaN(Project.Rate.RecourcesTotalOverworkTime))
-                {
-                    string s = "Общее время переработки ресурсов: " + Math.Round(Project.Rate.RecourcesTotalOverworkTime, 2) + "ч.";
-                    firstItem.Items.Add(s);
-                }
-            }
-
-            CreateTreeViewItems(Project.Tasks, ref firstItem);
-            TasksTreeView.Items.Add(firstItem);
+            FillTreeView();
 
             //Data grid
             ResourcesDataGrid.ItemsSource = Project.Resources;
@@ -196,6 +164,122 @@ namespace ProjectSuccessWPF
 
             //Enable buttons
             CreateReportMenuItem.IsEnabled = true;
+        }
+
+        private void FillTreeView()
+        {
+            TasksTreeView.Items.Clear();
+            TreeViewItem firstItem = new TreeViewItem
+            {
+                Header = Project.ProjectName
+            };
+
+            if (Project.Rate != null)
+            {
+                if (!double.IsNaN(Project.Rate.ProjectOverCostPercentage))
+                {
+                    string s = "Оценка перерасхода средств: " + Math.Round(Project.Rate.ProjectOverCostPercentage, 2) + "%, " + Project.Rate.GetOvercostRateString() + ".";
+                    firstItem.Items.Add(s);
+                }
+
+                if (!double.IsNaN(Project.Rate.MeanTaskDurationRate))
+                {
+                    string s = "Оценка средней продолжительность задач: " + Math.Round(Project.Rate.MeanTaskDurationRate, 2) + "%, " + Project.Rate.GetMeanTaskDurationString() + '.';
+                    firstItem.Items.Add(s);
+                }
+
+                if (!double.IsNaN(Project.Rate.ProjectOvertimeRate))
+                {
+                    string s = "Оценка перерасхода времени: " + Math.Round(Project.Rate.ProjectOvertimeRate, 2) + "%, " + Project.Rate.GetProjectOvertimeString() + '.';
+                    firstItem.Items.Add(s);
+                }
+
+                if (!double.IsNaN(Project.Rate.RecourcesTotalOverworkTime))
+                {
+                    string s = "Общее время переработки ресурсов: " + Math.Round(Project.Rate.RecourcesTotalOverworkTime, 2) + "ч.";
+                    firstItem.Items.Add(s);
+                }
+
+                if (!double.IsNaN(Project.Rate.AnomalyTasksCount))
+                {
+                    string s = "Количество неправильно заполненных задач: " + Project.Rate.AnomalyTasksCount;
+                    firstItem.Items.Add(s);
+                }
+            }
+
+            foreach(TaskInformation taskInformation in Project.Tasks)
+            {
+                TreeViewItem treeViewItem = new TreeViewItem
+                {
+                    IsExpanded = true,
+                    Header = "Задача \"" + taskInformation.TaskName + "\" (" + taskInformation.CompletePercentage + "%)"
+                };
+
+                if (taskInformation.IsAnomaly || taskInformation.HaveDeviation)
+                {
+                    if (taskInformation.IsAnomaly)
+                    {
+                        treeViewItem.BorderBrush = Brushes.Red;
+                        treeViewItem.BorderThickness = new Thickness(0, 0, 0, 2);
+                    }
+
+                    if (taskInformation.HaveDeviation)
+                    {
+                        treeViewItem.BorderBrush = Brushes.Yellow;
+                        treeViewItem.BorderThickness = new Thickness(0, 0, 0, 2);
+                    }
+
+                    if(taskInformation.IsAnomaly && taskInformation.HaveDeviation)
+                    {
+                        treeViewItem.BorderBrush = Brushes.DarkRed;
+                        treeViewItem.BorderThickness = new Thickness(0, 0, 0, 2);
+                    }
+                }
+
+                treeViewItem.Items.Add("Плановая продолжительность: " + taskInformation.Duration.Estimated);
+                if (taskInformation.Duration.TotalDuration() != 0)
+                    treeViewItem.Items.Add(new TreeViewItem()
+                    {
+                        Header = "Продолжительность: " + taskInformation.Duration.Spent,
+                        Focusable = false
+                    });
+                if (taskInformation.Duration.Overtime != 0)
+                    treeViewItem.Items.Add(new TreeViewItem()
+                    {
+                        Header = "Переработка: " + taskInformation.Duration.Overtime,
+                        Focusable = false
+                    });
+                if (taskInformation.Cost != 0)
+                    treeViewItem.Items.Add(new TreeViewItem()
+                    {
+                        Header = "Стоимость: " + taskInformation.Cost + currencySymbol,
+                        Focusable = false
+                    });
+                if (taskInformation.OverCost != 0.0)
+                    treeViewItem.Items.Add(new TreeViewItem()
+                    {
+                        Header = "Перерасход: " + taskInformation.OverCost + currencySymbol,
+                        Focusable = false
+                    });
+                TreeViewItem resourcesItem = new TreeViewItem
+                {
+                    IsExpanded = true
+                };
+                if (taskInformation.Resources != null && taskInformation.Resources.Count != 0)
+                {
+                    resourcesItem.Header = "Ресурсы";
+                    foreach (ResourceInformation resource in taskInformation.Resources)
+                    {
+                        resourcesItem.Items.Add(resource.ResourceName);
+
+                    }
+                    treeViewItem.Items.Add(resourcesItem);
+                }
+                firstItem.IsExpanded = true;
+                firstItem.Items.Add(treeViewItem);
+            }
+            
+            TasksTreeView.Items.Add(firstItem);
         }
 
         private void CreateReportMenuItem_Click(object sender, RoutedEventArgs e)

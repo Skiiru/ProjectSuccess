@@ -18,7 +18,7 @@ namespace ProjectSuccessWPF
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            if (int.TryParse(DaysInSprintTB.Text, out int days) && days > 0)
+            if (int.TryParse(DaysInSprintTB.Text, out int days) && days > 0 && double.TryParse(PreferTaskDurationTB.Text, out double ptd))
             {
                 AppSettings.Settings.Default.RedmineHost = HostTB.Text;
                 AppSettings.Settings.Default.RedmineApiKey = ApiKeyTB.Text;
@@ -29,6 +29,11 @@ namespace ProjectSuccessWPF
                     AppSettings.Settings.Default.RedmineConnectionType = "API";
                 else
                     AppSettings.Settings.Default.RedmineConnectionType = "LOGIN";
+                if (ManualRB.IsChecked.HasValue && ManualRB.IsChecked.Value)
+                    AppSettings.Settings.Default.PreferTaskDurationSource = "MANUAL";
+                else
+                    AppSettings.Settings.Default.PreferTaskDurationSource = "MEAN";
+                AppSettings.Settings.Default.PreferTaskDuration = ptd;
                 AppSettings.Settings.Default.Save();
                 Close();
             }

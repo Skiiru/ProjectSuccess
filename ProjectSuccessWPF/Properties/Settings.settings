@@ -18,7 +18,13 @@
       <Value Profile="(Default)">admin</Value>
     </Setting>
     <Setting Name="RedmineConnectionType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">LOGIN</Value>
+      <Value Profile="(Default)">API</Value>
+    </Setting>
+    <Setting Name="PreferTaskDuration" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
+    <Setting Name="PreferTaskDurationSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MEAN</Value>
     </Setting>
   </Settings>
 </SettingsFile>

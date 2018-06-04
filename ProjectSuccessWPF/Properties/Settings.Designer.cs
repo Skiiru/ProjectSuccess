@@ -85,13 +85,37 @@ namespace AppSettings {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LOGIN")]
+        [global::System.Configuration.DefaultSettingValueAttribute("API")]
         public string RedmineConnectionType {
             get {
                 return ((string)(this["RedmineConnectionType"]));
             }
             set {
                 this["RedmineConnectionType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public double PreferTaskDuration {
+            get {
+                return ((double)(this["PreferTaskDuration"]));
+            }
+            set {
+                this["PreferTaskDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MEAN")]
+        public string PreferTaskDurationSource {
+            get {
+                return ((string)(this["PreferTaskDurationSource"]));
+            }
+            set {
+                this["PreferTaskDurationSource"] = value;
             }
         }
     }

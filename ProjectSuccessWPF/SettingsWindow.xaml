@@ -54,7 +54,18 @@
                         <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Margin="5">Кол-во дней в спринте:</Label>
-                    <TextBox Name="DaysInSprintTB" Margin="10" Grid.Column="1" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=DaysInSprint}"></TextBox>
+                    <TextBox Name="DaysInSprintTB" Margin="10" Grid.Column="1" 
+                             Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=DaysInSprint}"></TextBox>
+                    <Label Margin="5" Grid.Row="1">Предпочитаемая продолжительность задач:</Label>
+                    <DockPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="10">
+                        <Label>Вручную</Label>
+                        <RadioButton Name="ManualRB" IsChecked="True" GroupName="PreferTaskDuration" Margin="5,8,0,0"></RadioButton>
+                        <TextBox Name="PreferTaskDurationTB" Margin="0,5,0,30" Width="35" Height="20"
+                                 Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=PreferTaskDuration}"
+                                 IsEnabled="{Binding ElementName=ManualRB, Path=IsChecked}"></TextBox>
+                        <Label>Автоматически (среднее значение)</Label>
+                        <RadioButton Name="AutoRB" GroupName="PreferTaskDuration" Margin="5,8,0,0"></RadioButton>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Redmine">
@@ -82,8 +93,12 @@
                         </DockPanel>
                     </StackPanel>
                     <Label Grid.Row="3" Margin="20,5,10,0">Password:</Label>
-                    <TextBox Name="ApiKeyTB" Margin="5" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=ApiRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineApiKey}"></TextBox>
-                    <TextBox Name="RedmineLoginTB" Margin="5" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding ElementName=LoginRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineLogin}"></TextBox>
+                    <TextBox Name="ApiKeyTB" Margin="5" Grid.Row="1" Grid.Column="1" 
+                             IsEnabled="{Binding ElementName=ApiRB, Path=IsChecked}" 
+                             Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineApiKey}"></TextBox>
+                    <TextBox Name="RedmineLoginTB" Margin="5" Grid.Row="2" Grid.Column="1" 
+                             IsEnabled="{Binding ElementName=LoginRB, Path=IsChecked}" 
+                             Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedmineLogin}"></TextBox>
                     <TextBox Name="RedminePasswordTB" Margin="5" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding ElementName=LoginRB, Path=IsChecked}" Text="{Binding Mode=OneWay, Source={x:Static properties:Settings.Default}, Path=RedminePassword}"></TextBox>
                 </Grid>
             </TabItem>

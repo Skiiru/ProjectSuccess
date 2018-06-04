@@ -1,6 +1,5 @@
 ﻿using net.sf.mpxj;
 using Redmine.Net.Api.Types;
-using System;
 using System.Collections.Generic;
 
 namespace ProjectSuccessWPF
@@ -32,6 +31,9 @@ namespace ProjectSuccessWPF
         public double OverCost { get; private set; }
 
         public int CompletePercentage { get; private set; }
+
+        public bool IsAnomaly { get; private set; }
+        public bool HaveDeviation { get; private set; }
 
         public TaskInformation(Task task, List<Resource> resources)
         {
@@ -74,6 +76,8 @@ namespace ProjectSuccessWPF
                 Status = TaskStatus.InWork;
             Tracker = "Undefined";
             Dates.SetCreatedDate(task.getCreateDate());
+            SetAnomaly();
+            SetDeviation();
         }
 
         public TaskInformation(Issue issue, ResourceInformation assignedTo)
@@ -116,6 +120,8 @@ namespace ProjectSuccessWPF
 
 
             ChildTasks = new List<TaskInformation>();
+            SetAnomaly();
+            SetDeviation();
 
         }
 
@@ -143,6 +149,16 @@ namespace ProjectSuccessWPF
             if (Duration.Overtime!= 0)
                 result += ", переработка - " + Duration.Overtime;
             return result;
+        }
+
+        private void SetAnomaly()
+        {
+            IsAnomaly = (Status == TaskStatus.Closed && (CompletePercentage != 100 ^ Dates.FinishDate != null)) ;
+        }
+
+        private void SetDeviation()
+        {
+            HaveDeviation = Duration.Overtime != 0;
         }
 
         public int SubTusksCount()
